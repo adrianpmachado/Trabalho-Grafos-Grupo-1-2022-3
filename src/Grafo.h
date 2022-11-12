@@ -1,3 +1,11 @@
+#include <iostream>
+#include <vector>
+
+#include "Aresta.h"
+#include "Vertice.h"
+
+using namespace std;
+
 class Grafo
 {
 private:
@@ -11,6 +19,9 @@ public:
     Grafo(int ordem, bool ehDirecionado = false, bool peso_vertice = false, bool peso_aresta = false);
     ~Grafo();
 
+    vector<Aresta*> arestas_grafo;
+    vector<Vertice*> vertices_grafo;
+
     //metodos padroẽs
     int getOrdem();
     bool get_ehDirecionado();
@@ -19,6 +30,8 @@ public:
 
     //metodos auxiliares
     void insere_aresta();
-    void insere_vertice();
+    void insere_vertice(int id);
     
+    bool existe_vertice(int id);
+
 };

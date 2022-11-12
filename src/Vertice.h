@@ -6,7 +6,7 @@ private:
     bool foi_visitado; //boleano para identificar se o vertice foi visitado ou não
 
 public:
-    Vertice(/* args */);
+    Vertice(int id);
     ~Vertice();
 
     //metodos padrões
