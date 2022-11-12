@@ -31,6 +31,7 @@ public:
     //metodos auxiliares
     void insere_vertice(int id);
     bool existe_vertice(int id);
+    Vertice* busca_vertice(int id);
 
     void insere_aresta(int id_saida,int id_destino, bool direcionado, float peso);
     bool existe_Aresta(int id_saida, int id_destino, bool direcionado, float peso);
