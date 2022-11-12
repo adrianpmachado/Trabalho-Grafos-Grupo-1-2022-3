@@ -9,6 +9,8 @@ Grafo::Grafo(int ordem, bool ehDirecionado = false, bool peso_vertice = false, b
     this->peso_aresta = peso_aresta;
 };
 
+
+//inserindo vertice
 void Grafo::insere_vertice(int id){
     if(existe_vertice(id)){
         cout  << "O vertice de id " << id << " já foi inserido no grafo" << endl;
@@ -29,3 +31,4 @@ bool Grafo::existe_vertice(int id){
     return false; // não encotrou, retorna falso
 };
 
+//inserindo Aresta 

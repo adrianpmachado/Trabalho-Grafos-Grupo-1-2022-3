@@ -29,9 +29,9 @@ public:
     bool get_peso_aresta();
 
     //metodos auxiliares
-    void insere_aresta();
     void insere_vertice(int id);
-    
     bool existe_vertice(int id);
 
+    void insere_aresta(int id_saida,int id_destino, bool direcionado, float peso);
+    bool existe_Aresta(int id_saida, int id_destino, bool direcionado, float peso);
 };
