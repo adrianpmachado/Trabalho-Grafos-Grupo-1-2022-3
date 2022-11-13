@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+#pasta com os grafos
+*.txt
+*.pdf
