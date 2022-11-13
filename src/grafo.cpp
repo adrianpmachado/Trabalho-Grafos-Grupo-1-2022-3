@@ -45,11 +45,12 @@ void Grafo::insere_aresta(int id_saida,int id_destino, bool direcionado, float p
     if(!vertices_grafo.empty() && existe_vertice(id_saida) && existe_vertice(id_destino)){
         //verificar se existe algum vertice no grafo, se existir verificar e existe o de saida e o de destino em especifico
         if(direcionado){
-            
-            
+            Vertice* vertice_aux_01 = busca_vertice(id_saida);
+            Vertice* vertice_aux_02 = busca_vertice(id_destino);
+                       
         }
         else{
-
+            
         }
     }
 }

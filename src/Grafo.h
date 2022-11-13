@@ -27,6 +27,8 @@ public:
     bool get_ehDirecionado();
     bool get_peso_vertice();
     bool get_peso_aresta();
+    Vertice* get_primeiro_vertice();
+    Vertice* get_ultimo_vertice();
 
     //metodos auxiliares
     void insere_vertice(int id);
