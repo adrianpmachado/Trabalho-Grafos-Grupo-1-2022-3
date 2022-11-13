@@ -7,9 +7,13 @@ Vertice::Vertice(int id){
 }
 
 int Vertice::get_id(){return this->id;}
+
 float Vertice::get_peso(){return this->peso;}
+
 bool Vertice::get_foi_visitado(){return this->foi_visitado;}
+
 int Vertice::get_grau_entrada(){return this->grau_entrada;}
+
 int Vertice::get_grau_saida(){return grau_saida;}
 
 void Vertice::set_id(int id){
@@ -26,4 +30,28 @@ void Vertice::set_grau_entrada(int grau_entrada){
 }
 void Vertice::set_grau_saida(int grau_saida){
     this->grau_saida = grau_saida;
+}
+void Vertice::adiciona_adjacencia(int id_destino){
+    this->vertices_adjacentes.push_back(id_destino);
+}
+void Vertice::adiciona_antecessor(int id_antecessor){
+    this->vertices_antecessor.push_back(id_antecessor);
+}
+bool Vertice::existe_aresta(int id_destino){
+    for(auto i:vertices_adjacentes){
+        if(i == id_destino){
+            return true;
+        }
+    }
+    return false;
+}
+Aresta* Vertice::insere_aresta_nao_direcionada(int id_saida,int id_destino,float peso){
+    if(existe_aresta(id_destino)){
+        return nullptr;
+    }
+    else{
+        Aresta* aresta_aux = new Aresta(id_saida,id_destino,false,peso);
+        adiciona_adjacencia(id_destino);
+        return aresta_aux;
+    }
 }
