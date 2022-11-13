@@ -1,3 +1,5 @@
+#include <list>
+
 class Vertice
 {
 private:
@@ -10,7 +12,10 @@ private:
 public:
     Vertice(int id);
     ~Vertice();
-    //
+    
+    //lista de vertices que se conectam a esse 
+    list<int> vertices_anteriores; // Lista de predecessores
+    list<int> vertices_adjacentes; //lista de adjacencia de vertice
     
     //metodos padrões
     int get_id();
@@ -24,4 +29,5 @@ public:
     void set_foi_visitado(bool foi_visitado);
     void set_grau_entrada(int grau_entrada);
     void set_grau_saida(int grau_saida);
+
 };
