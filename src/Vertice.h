@@ -24,8 +24,7 @@ public:
     void adiciona_adjacencia(int id_destino);
     void adiciona_antecessor(int id_antecessor);
     bool existe_aresta(int id_destino);
-    Aresta* insere_aresta_nao_direcionada(int id_saida,int id_destino,float peso);
-
+    Aresta* insere_aresta(int id_saida,int id_destino,float peso);
 
     //lista de vertices que se conectam a esse 
     list<int> vertices_antecessor; // Lista de predecessores
