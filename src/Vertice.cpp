@@ -58,3 +58,10 @@ Aresta* Vertice::insere_aresta_nao_direcionada(int id_saida,int id_destino,float
         return aresta_aux;
     }
 }
+
+void Vertice::imprime_adjacencias(){
+    for(auto i :vertices_adjacentes){
+        cout << i << " - ";
+    }
+    cout<< "" << endl;
+}

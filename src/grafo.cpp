@@ -81,3 +81,10 @@ bool Grafo::existe_Aresta(int id_saida, int id_destino, bool direcionado, float 
         return false;
     }
 }
+
+void Grafo::imprimir_grafo_lista_de_adjacencia(){
+    for(Vertice* vertixe_aux : vertices_grafo){
+        cout << vertixe_aux->get_id();
+        vertixe_aux->imprime_adjacencias();
+    }
+}

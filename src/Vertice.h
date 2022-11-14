@@ -43,6 +43,7 @@ public:
     void set_foi_visitado(bool foi_visitado);
     void set_grau_entrada(int grau_entrada);
     void set_grau_saida(int grau_saida);
+    void imprime_adjacencias();
 
 };
 #endif // VERTICE_H_INCLUDED
