@@ -49,14 +49,9 @@ bool Vertice::existe_aresta(int id_destino){
     return false;
 }
 Aresta* Vertice::insere_aresta_nao_direcionada(int id_saida,int id_destino,float peso){
-    if(existe_aresta(id_destino)){
-        return nullptr;
-    }
-    else{
-        Aresta* aresta_aux = new Aresta(id_saida,id_destino,false,peso);
-        adiciona_adjacencia(id_destino);
-        return aresta_aux;
-    }
+    Aresta* aresta_aux = new Aresta(id_saida,id_destino,false,peso);
+    adiciona_adjacencia(id_destino);
+    return aresta_aux;
 }
 
 void Vertice::imprime_adjacencias(){
