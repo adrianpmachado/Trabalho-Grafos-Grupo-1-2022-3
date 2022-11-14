@@ -1,14 +1,14 @@
 #include "Grafo.h"
+#include <list>
 
 using namespace std;
 
-Grafo::Grafo(int ordem, bool ehDirecionado = false, bool peso_vertice = false, bool peso_aresta = false){
+Grafo::Grafo(int ordem, bool ehDirecionado, bool peso_vertice, bool peso_aresta){
     this->ordem = ordem;
     this->ehDirecionado = ehDirecionado;
     this->peso_vertice = peso_vertice;
     this->peso_aresta = peso_aresta;
 };
-
 
 //inserindo vertice
 void Grafo::insere_vertice(int id){
@@ -71,6 +71,7 @@ void Grafo::insere_aresta(int id_saida,int id_destino, bool direcionado, float p
 bool Grafo::existe_Aresta(int id_saida, int id_destino, bool direcionado, float peso){
     if(direcionado){
         //continuar
+        return false;
     }
     else{
         for(Aresta* aresta_aux :arestas_grafo){

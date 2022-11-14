@@ -1,5 +1,10 @@
+#pragma once
+#ifndef GRAFO_H_INCLUDED
+#define GRAFO_H_INCLUDED
+
 #include <iostream>
 #include <vector>
+#include <list>
 
 #include "Aresta.h"
 #include "Vertice.h"
@@ -16,17 +21,13 @@ private:
     bool peso_aresta; //se tem peso nas arestas
 public:
     //iniciando o construtor com alguns valores já predefinidos
-    Grafo(int ordem, bool ehDirecionado = false, bool peso_vertice = false, bool peso_aresta = false);
+    Grafo(int ordem, bool ehDirecionado, bool peso_vertice, bool peso_aresta);
     ~Grafo();
 
     vector<Aresta*> arestas_grafo;
     vector<Vertice*> vertices_grafo;
 
     //metodos padroẽs
-    int getOrdem();
-    bool get_ehDirecionado();
-    bool get_peso_vertice();
-    bool get_peso_aresta();
     Vertice* get_primeiro_vertice();
     Vertice* get_ultimo_vertice();
 
@@ -38,3 +39,5 @@ public:
     void insere_aresta(int id_saida,int id_destino, bool direcionado, float peso);
     bool existe_Aresta(int id_saida, int id_destino, bool direcionado, float peso);
 };
+
+#endif //GRAFO_H_INCLUDED

@@ -1,4 +1,7 @@
+#include <iostream>
+#include <list>
 #include "Vertice.h"
+#include "Aresta.h"
 
 using namespace std;
 

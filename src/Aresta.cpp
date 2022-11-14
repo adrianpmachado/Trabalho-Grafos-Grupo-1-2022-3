@@ -1,4 +1,5 @@
 #include "Aresta.h"
+#include <list>
 
 using namespace std;
 
@@ -17,9 +18,6 @@ int Aresta::get_id_saida(){
 }
 int Aresta::get_id_destino(){
     return this->id_destino;
-}
-float Aresta::get_peso(){
-    return this->peso;
 }
 bool Aresta::get_eh_direcionado(){
     return this->eh_direcionado;

@@ -1,5 +1,11 @@
-#include <list>
+#pragma once
+#ifndef VERTICE_H_INCLUDED
+#define VERTICE_H_INCLUDED
 #include "Aresta.h"
+#include <list>
+
+using namespace std;
+
 
 class Vertice
 {
@@ -39,3 +45,4 @@ public:
     void set_grau_saida(int grau_saida);
 
 };
+#endif // VERTICE_H_INCLUDED
