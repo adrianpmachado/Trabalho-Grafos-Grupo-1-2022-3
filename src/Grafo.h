@@ -19,9 +19,10 @@ private:
     bool ehDirecionado; //boleano para identificar se o grafo é direciondo ou não
     bool peso_vertice; //se tem peso nos vertices 
     bool peso_aresta; //se tem peso nas arestas
+    string path_arquivo_entrada;
 public:
     //iniciando o construtor com alguns valores já predefinidos
-    Grafo(int ordem, bool ehDirecionado, bool peso_vertice, bool peso_aresta);
+    Grafo(string path_arquivo_entrada,int ordem, bool ehDirecionado, bool peso_vertice, bool peso_aresta);
     ~Grafo();
 
     vector<Aresta*> arestas_grafo;
@@ -36,7 +37,7 @@ public:
     void insere_aresta(int id_saida,int id_destino, bool direcionado, float peso); //funcionando apenas para grafos não direcionados
     bool existe_Aresta(int id_saida, int id_destino, bool direcionado, float peso); //funcionando apenas para grafos não direcionados
     void imprimir_grafo_lista_de_adjacencia();
-    void carrega_grafo(string arquivo_entrada);
+    void carrega_grafo();
 
 };
 

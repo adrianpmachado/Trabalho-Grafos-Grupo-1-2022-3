@@ -1,13 +1,16 @@
 #include "Grafo.h"
 #include <list>
+#include <fstream>
 
 using namespace std;
 
-Grafo::Grafo(int ordem, bool ehDirecionado, bool peso_vertice, bool peso_aresta){
+Grafo::Grafo(string path_arquivo_entrada,int ordem, bool ehDirecionado, bool peso_vertice, bool peso_aresta){
+    this->path_arquivo_entrada = path_arquivo_entrada;
     this->ordem = ordem;
     this->ehDirecionado = ehDirecionado;
     this->peso_vertice = peso_vertice;
     this->peso_aresta = peso_aresta;
+    this->carrega_grafo();
 };
 
 //inserindo vertice
@@ -42,6 +45,8 @@ Vertice* Grafo::busca_vertice(int id){
 
 //inserindo Aresta 
 void Grafo::insere_aresta(int id_saida,int id_destino, bool direcionado, float peso){
+    this->insere_vertice(id_saida);
+    this->insere_vertice(id_destino);
     if(!vertices_grafo.empty() && existe_vertice(id_saida) && existe_vertice(id_destino)){
         //verificar se existe algum vertice no grafo, se existir verificar e existe o de saida e o de destino em especifico
         if(direcionado){
@@ -60,17 +65,18 @@ void Grafo::insere_aresta(int id_saida,int id_destino, bool direcionado, float p
             //adicionando a aresta na lista de arestas do grafo
             this->arestas_grafo.push_back(aresta_aux_01);      
 
-            //TODO: FALTA IMPLEMENTAR A LISTA DE VERTICES ANTERIORES(VERTICES QUE APONTAM PARA ESSE)
         }
         else{
             //criando um ponteiro para um vertice para podermos manipular o vertice de saida
             Vertice* vertice_aux_01 = this->busca_vertice(id_saida);
             //criand um ponteiro para um vettice para podermos manipular o vertice de entrada
             Vertice* vertice_aux_02 = this->busca_vertice(id_destino);
-            //criando um vertice auxiliar para podemos depois salvar na lista de arestas do grafo
+            //criando dois vertices auxiliares para podemos depois salvar na lista de arestas dos grafos
             Aresta* aresta_aux_01;
-            //inserindo uma aresta não direcinonada no vertice
+            Aresta* aresta_aux_02;
+            //inserindo uma aresta não direcinonada nos vertices
             aresta_aux_01 = vertice_aux_01->insere_aresta(id_saida,id_destino,peso);
+            aresta_aux_02 = vertice_aux_02->insere_aresta(id_destino,id_saida,peso);
             //adicionando +1 ao grau de saida e entrada, já que direcionado == 0
             vertice_aux_01->set_grau_saida(vertice_aux_01->get_grau_saida()+1);
             vertice_aux_01->set_grau_entrada(vertice_aux_01->get_grau_entrada()+1);
@@ -79,35 +85,41 @@ void Grafo::insere_aresta(int id_saida,int id_destino, bool direcionado, float p
             vertice_aux_02->set_grau_entrada(vertice_aux_02->get_grau_entrada()+1);
             //adicionando a aresta na lista de arestas do grafo
             this->arestas_grafo.push_back(aresta_aux_01);
-
-            //TODO: FALTA ARRUMAR, A ARESTA ESTÁ INDO SOMENTE PARA UM VÉRTICE, NÃO PARA O DE DESTINO
         }
     }
 }
 bool Grafo::existe_Aresta(int id_saida, int id_destino, bool direcionado, float peso){
-    if(direcionado){
-        //TODO: FALTA VERIFICAR SE EXISTE ARESTA DIRECIONADA
-        return false;
+    for(Aresta* aresta_aux :arestas_grafo){
+        if((aresta_aux->get_id_saida()==id_saida)&&(aresta_aux->get_id_destino()==id_destino))
+            return true;
     }
-    else{
-        for(Aresta* aresta_aux :arestas_grafo){
-            if((aresta_aux->get_id_saida()==id_saida)&&(aresta_aux->get_id_destino()==id_destino))
-                return true;
-        }
-        return false;
-    }
+    return false;
 }
 
 void Grafo::imprimir_grafo_lista_de_adjacencia(){
     for(Vertice* vertixe_aux : vertices_grafo){
-        cout << vertixe_aux->get_id() << " -> ";
+        cout << vertixe_aux->get_id() << " - ";
         vertixe_aux->imprime_adjacencias();
     }
 }
-
-void Grafo::carrega_grafo(string arquivo_entrada){
-    //TODO CARREGAR GRAFO DIRECIONADO
-    //TODO CARREGAR GRAFO DIRECIONADO COM PESO NA ARESTA
-    //TODO CARREGAR GRAFO DIRECIONADO COM PESO NO VERTICE
-    //
+void Grafo::carrega_grafo(){
+    //abrir o arquivo
+    int ordem_grafo;
+    int id_saida;
+    int id_destino;
+    int valor_peso_aresta;
+    int valor_peso_vertice;
+    fstream arquivo_grafos;
+    arquivo_grafos.open(path_arquivo_entrada,ios::in);
+    if(arquivo_grafos.is_open()){
+        arquivo_grafos >> ordem_grafo;
+        if((!ehDirecionado)&&(!peso_vertice)&&(!peso_aresta)){
+            while(arquivo_grafos>>id_saida>>id_destino){
+                this->insere_aresta(id_saida,id_destino,false,0);
+            }
+        }
+    }
+    else{
+            cout << "não foi possivel abrir o arquivo " << endl;
+        }
 }

@@ -8,12 +8,7 @@ using namespace std;
 
 int main (int argc, char * argv[])
 {
-    cout <<"Arquivo de entrada: " << argv[1] << endl;
-    cout <<"Arquivo de saida: " << argv[2] << endl;
-    cout <<"Direcionado: " << argv[3] << endl;
-    cout <<"Peso aresta: "<< argv[4] << endl;
-    cout <<"Peso vertices: " << argv[5] << endl;
-
-    
+    Grafo* grafo01 = new Grafo("instancias Grafos não ponderados/grafo_1000_1.txt",1,0,0,0);
+    grafo01->imprimir_grafo_lista_de_adjacencia();
     return 0;
 }
