@@ -60,7 +60,7 @@ void Grafo::insere_aresta(int id_saida,int id_destino, bool direcionado, float p
             //adicionando a aresta na lista de arestas do grafo
             this->arestas_grafo.push_back(aresta_aux_01);      
 
-            //TO DO: FALTA IMPLEMENTAR A LISTA DE VERTICES ANTERIORES(VERTICES QUE APONTAM PARA ESSE)
+            //TODO: FALTA IMPLEMENTAR A LISTA DE VERTICES ANTERIORES(VERTICES QUE APONTAM PARA ESSE)
         }
         else{
             //criando um ponteiro para um vertice para podermos manipular o vertice de saida
@@ -80,13 +80,13 @@ void Grafo::insere_aresta(int id_saida,int id_destino, bool direcionado, float p
             //adicionando a aresta na lista de arestas do grafo
             this->arestas_grafo.push_back(aresta_aux_01);
 
-            //TO DO: FALTA ARRUMAR, A ARESTA ESTÁ INDO SOMENTE PARA UM VÉRTICE, NÃO PARA O DE DESTINO
+            //TODO: FALTA ARRUMAR, A ARESTA ESTÁ INDO SOMENTE PARA UM VÉRTICE, NÃO PARA O DE DESTINO
         }
     }
 }
 bool Grafo::existe_Aresta(int id_saida, int id_destino, bool direcionado, float peso){
     if(direcionado){
-        //continuar
+        //TODO: FALTA VERIFICAR SE EXISTE ARESTA DIRECIONADA
         return false;
     }
     else{
@@ -103,4 +103,11 @@ void Grafo::imprimir_grafo_lista_de_adjacencia(){
         cout << vertixe_aux->get_id() << " -> ";
         vertixe_aux->imprime_adjacencias();
     }
+}
+
+void Grafo::carrega_grafo(string arquivo_entrada){
+    //TODO CARREGAR GRAFO DIRECIONADO
+    //TODO CARREGAR GRAFO DIRECIONADO COM PESO NA ARESTA
+    //TODO CARREGAR GRAFO DIRECIONADO COM PESO NO VERTICE
+    //
 }

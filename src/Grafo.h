@@ -36,6 +36,7 @@ public:
     void insere_aresta(int id_saida,int id_destino, bool direcionado, float peso); //funcionando apenas para grafos não direcionados
     bool existe_Aresta(int id_saida, int id_destino, bool direcionado, float peso); //funcionando apenas para grafos não direcionados
     void imprimir_grafo_lista_de_adjacencia();
+    void carrega_grafo(string arquivo_entrada);
 
 };
 
