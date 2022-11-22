@@ -123,3 +123,20 @@ void Grafo::carrega_grafo(){
             cout << "não foi possivel abrir o arquivo " << endl;
         }
 }
+//funcionando por enquando somente com grafos não direcionados
+void Grafo::salva_grafo(string path_arquivo_entrada) {
+    fstream arquivo_graphviz;
+    arquivo_graphviz.open(path_arquivo_entrada,ios::out);
+    if(arquivo_graphviz.is_open()){
+        arquivo_graphviz << "graph {";
+        for(Vertice* vertixe_aux : vertices_grafo){
+            for(auto aux: vertixe_aux->vertices_adjacentes){
+                arquivo_graphviz << vertixe_aux->get_id() << "--" << aux << ";" <<endl;
+            }
+        }
+        arquivo_graphviz << "}";
+    }
+    else{
+        cout << "arquivo não foi aberto" << endl;
+    }
+}
