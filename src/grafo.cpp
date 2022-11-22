@@ -107,8 +107,7 @@ void Grafo::carrega_grafo(){
     int ordem_grafo;
     int id_saida;
     int id_destino;
-    int valor_peso_aresta;
-    int valor_peso_vertice;
+    int valor_peso;
     fstream arquivo_grafos;
     arquivo_grafos.open(path_arquivo_entrada,ios::in);
     if(arquivo_grafos.is_open()){
@@ -118,6 +117,17 @@ void Grafo::carrega_grafo(){
                 this->insere_aresta(id_saida,id_destino,false,0);
             }
         }
+        else if((!ehDirecionado)&&(peso_vertice)&&(!peso_aresta)){
+            while(arquivo_grafos>>id_saida>>id_destino>>valor_peso){
+                this->insere_aresta(id_saida,id_destino,false,valor_peso);
+            }
+        }
+        else if((!ehDirecionado)&&(!peso_vertice)&&(peso_aresta)){
+            while(arquivo_grafos>>id_saida>>id_destino>>valor_peso){
+                this->insere_aresta(id_saida,id_destino,false,valor_peso);
+            }
+        }
+        //TODO: falta especificar o que tem peso, o vertice ou a aresta;
     }
     else{
             cout << "não foi possivel abrir o arquivo " << endl;
@@ -128,13 +138,18 @@ void Grafo::salva_grafo(string path_arquivo_entrada) {
     fstream arquivo_graphviz;
     arquivo_graphviz.open(path_arquivo_entrada,ios::out);
     if(arquivo_graphviz.is_open()){
-        arquivo_graphviz << "graph {";
-        for(Vertice* vertixe_aux : vertices_grafo){
-            for(auto aux: vertixe_aux->vertices_adjacentes){
-                arquivo_graphviz << vertixe_aux->get_id() << "--" << aux << ";" <<endl;
-            }
+        if(ehDirecionado){
+            //TODO
         }
+        else {
+            arquivo_graphviz << "graph {";
+            for(Vertice* vertixe_aux : vertices_grafo){
+                for(auto aux: vertixe_aux->vertices_adjacentes){
+                    arquivo_graphviz << vertixe_aux->get_id() << "--" << aux << ";" <<endl;
+                }
+            }
         arquivo_graphviz << "}";
+        }
     }
     else{
         cout << "arquivo não foi aberto" << endl;
