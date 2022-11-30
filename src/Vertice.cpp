@@ -35,14 +35,16 @@ void Vertice::set_grau_saida(int grau_saida){
     this->grau_saida = grau_saida;
 }
 void Vertice::adiciona_adjacencia(int id_destino){
-    this->vertices_adjacentes.push_back(id_destino);
+    this->vertices_adjacentes[id_destino] = new Vertice(id_destino);
+    this->grau_saida++;
 }
 void Vertice::adiciona_antecessor(int id_antecessor){
-    this->vertices_antecessor.push_back(id_antecessor);
+    this->vertices_antecessor[id_antecessor] = new Vertice(id_antecessor);
+    this->grau_entrada++;
 }
 bool Vertice::existe_aresta(int id_destino){
-    for(auto i:vertices_adjacentes){
-        if(i == id_destino){
+    for(auto it = this->vertices_adjacentes.begin(); it != this->vertices_adjacentes.end(); it++){
+        if(it->second->get_id() == id_destino){
             return true;
         }
     }
@@ -55,25 +57,26 @@ Aresta* Vertice::insere_aresta(int id_saida,int id_destino,float peso){
 }
 
 void Vertice::imprime_adjacencias(){
-    for(auto i :vertices_adjacentes){
-        cout << "[ " << i << " ] ";
+    for(auto it = this->vertices_adjacentes.begin(); it != this->vertices_adjacentes.end(); it++){
+        cout << " [" <<it->second->get_id() << "]";
     }
-    cout<< "" << endl;
 }
 
 void Vertice::remove_adjacencia(int id){
-    for(auto i = vertices_adjacentes.begin(); i != vertices_adjacentes.end(); i++){
-        if(*i == id){
-            vertices_adjacentes.erase(i);
+    for(auto it = this->vertices_adjacentes.begin(); it != this->vertices_adjacentes.end(); it++){
+        if(it->second->get_id() == id){
+            this->vertices_adjacentes.erase(it);
+            this->grau_saida--;
             break;
         }
     }
 }
 
 void Vertice::remove_antecessor(int id){
-    for(auto i = vertices_antecessor.begin(); i != vertices_antecessor.end(); i++){
-        if(*i == id){
-            vertices_antecessor.erase(i);
+    for(auto it = this->vertices_antecessor.begin(); it != this->vertices_antecessor.end(); it++){
+        if(it->second->get_id() == id){
+            this->vertices_antecessor.erase(it);
+            this->grau_entrada--;
             break;
         }
     }

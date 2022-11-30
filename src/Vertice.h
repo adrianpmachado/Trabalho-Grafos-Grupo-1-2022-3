@@ -2,7 +2,9 @@
 #ifndef VERTICE_H_INCLUDED
 #define VERTICE_H_INCLUDED
 #include "Aresta.h"
+#include "Vertice.h"
 #include <list>
+#include <map>
 
 using namespace std;
 
@@ -29,8 +31,8 @@ public:
     Aresta* insere_aresta(int id_saida,int id_destino,float peso);
 
     //lista de vertices que se conectam a esse 
-    list<int> vertices_antecessor; // Lista de predecessores
-    list<int> vertices_adjacentes; //lista de adjacencia de vertice
+    map<int,Vertice*> vertices_antecessor; // Lista de predecessores
+    map<int,Vertice*> vertices_adjacentes; //lista de adjacencia de vertice
     
     //metodos padrões
     int get_id();

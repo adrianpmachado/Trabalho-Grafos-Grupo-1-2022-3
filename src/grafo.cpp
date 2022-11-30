@@ -12,7 +12,6 @@ Grafo::Grafo(string path_arquivo_entrada, bool ehDirecionado, bool peso_vertice,
     this->carrega_grafo();
 };
 
-//inserindo vertice
 bool Grafo::insere_vertice(int id){
     //verificar se o vertice já foi inserido
     if(busca_vertice(id) == NULL){
@@ -24,13 +23,13 @@ bool Grafo::insere_vertice(int id){
         return true;
     }
 };
-
 bool Grafo::remove_vertice(int id){
-    //renover a adjacencia de todos os vertices que apontam para esse
-    //remover a adjacencia de todos os vertices que esse aponta
     for(auto it = this->hash_vertices_grafo.begin(); it != this->hash_vertices_grafo.end(); it++){
+        //renover a adjacencia de todos os vertices que apontam para esse
         it->second->remove_adjacencia(id);
+        //remover a adjacencia de todos os vertices que esse aponta
         it->second->remove_antecessor(id);
+        
     }
     //remover o vertice do hash
     if(busca_vertice(id) != NULL){
@@ -41,7 +40,6 @@ bool Grafo::remove_vertice(int id){
         return false;
     }
 }
-
 Vertice* Grafo::busca_vertice(int id){
     if(this->hash_vertices_grafo.find(id) != hash_vertices_grafo.end()){
         return this->hash_vertices_grafo.at(id);
@@ -50,7 +48,6 @@ Vertice* Grafo::busca_vertice(int id){
         return NULL;
     }
 };
-//inserindo Aresta 
 void Grafo::insere_aresta(int id_saida,int id_destino, float peso){
     this->insere_vertice(id_saida);
     this->insere_vertice(id_destino);
@@ -90,7 +87,6 @@ void Grafo::insere_aresta(int id_saida,int id_destino, float peso){
         }
     }
 }
-
 bool Grafo::existe_Aresta(int id_saida, int id_destino, float peso){
     for(Aresta* aresta_aux :arestas_grafo){
         if((aresta_aux->get_id_saida()==id_saida)&&(aresta_aux->get_id_destino()==id_destino))
@@ -135,22 +131,22 @@ void Grafo::carrega_grafo(){
             cout << "não foi possivel abrir o arquivo " << endl;
         }
 }
-void Grafo::salva_grafo(string path_arquivo_entrada) {
+void Grafo::salva_grafo(string path_arquivo_saida) {
     fstream arquivo_graphviz;
-    arquivo_graphviz.open(path_arquivo_entrada,ios::out);
+    arquivo_graphviz.open(path_arquivo_saida,ios::out);
     if(arquivo_graphviz.is_open()){
+        arquivo_graphviz << "graph grafo {" << endl;
         if(ehDirecionado){
-            //TODO
+            for(auto aresta_aux : arestas_grafo){
+                arquivo_graphviz << aresta_aux->get_id_saida() << "->" << aresta_aux->get_id_destino()<< endl;
+            }
         }
         else {
-            arquivo_graphviz << "graph {";
-            // for(Vertice* vertixe_aux : vertices_grafo){
-            //     for(auto aux: vertixe_aux->vertices_adjacentes){
-            //         arquivo_graphviz << vertixe_aux->get_id() << "--" << aux << ";" <<endl;
-            //     }
-            // }
-        arquivo_graphviz << "}";
+            for(auto aresta_aux : arestas_grafo){
+                arquivo_graphviz << aresta_aux->get_id_saida() << "--" << aresta_aux->get_id_destino()<< endl;
+            }
         }
+        arquivo_graphviz << "}";
     }
     else{
         cout << "arquivo não foi aberto" << endl;
