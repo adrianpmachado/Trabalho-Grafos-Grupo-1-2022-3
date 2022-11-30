@@ -5,6 +5,8 @@
 #include <iostream>
 #include <vector>
 #include <list>
+#include <map>
+
 
 #include "Aresta.h"
 #include "Vertice.h"
@@ -26,17 +28,16 @@ public:
     ~Grafo();
 
     vector<Aresta*> arestas_grafo;
-    vector<Vertice*> vertices_grafo;
+    map<int,Vertice*> hash_vertices_grafo;
 
     Vertice* get_primeiro_vertice();
     Vertice* get_ultimo_vertice();
     bool insere_vertice(int id); //funcionando
     bool remove_vertice(int id);
-    bool existe_vertice(int id); //funcionando
     Vertice* busca_vertice(int id); //funcionando
     int get_indice_vertice(int id);
-    void insere_aresta(int id_saida,int id_destino, bool direcionado, float peso); //funcionando apenas para grafos não direcionados
-    bool existe_Aresta(int id_saida, int id_destino, bool direcionado, float peso); //funcionando apenas para grafos não direcionados
+    void insere_aresta(int id_saida,int id_destino, float peso); 
+    bool existe_Aresta(int id_saida, int id_destino, float peso); 
     void imprimir_grafo_lista_de_adjacencia();
     void carrega_grafo();
     void salva_grafo(string path_arquivo_entrada);

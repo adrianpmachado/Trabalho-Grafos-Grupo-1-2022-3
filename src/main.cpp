@@ -20,9 +20,7 @@ int main (int argc, char * argv[])
     // cout << argv [4] << endl;
     // cout << argv [5] <<endl;
     string caminho = argv [1];
-    cout << caminho << endl;
     Grafo* grafo01 = new Grafo(caminho,50000,0,0,0);
-    
     grafo01->imprimir_grafo_lista_de_adjacencia();
     return 0;
 }
