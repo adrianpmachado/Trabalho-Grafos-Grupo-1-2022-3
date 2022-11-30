@@ -60,3 +60,21 @@ void Vertice::imprime_adjacencias(){
     }
     cout<< "" << endl;
 }
+
+void Vertice::remove_adjacencia(int id){
+    for(auto i = vertices_adjacentes.begin(); i != vertices_adjacentes.end(); i++){
+        if(*i == id){
+            vertices_adjacentes.erase(i);
+            break;
+        }
+    }
+}
+
+void Vertice::remove_antecessor(int id){
+    for(auto i = vertices_antecessor.begin(); i != vertices_antecessor.end(); i++){
+        if(*i == id){
+            vertices_antecessor.erase(i);
+            break;
+        }
+    }
+}

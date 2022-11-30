@@ -23,6 +23,8 @@ public:
     //metodos para manutenção dos Vertices e Arestas
     void adiciona_adjacencia(int id_destino);
     void adiciona_antecessor(int id_antecessor);
+    void remove_adjacencia(int id);
+    void remove_antecessor(int id);
     bool existe_aresta(int id_destino);
     Aresta* insere_aresta(int id_saida,int id_destino,float peso);
 

@@ -27,9 +27,15 @@ bool Grafo::insere_vertice(int id){
 };
 
 bool Grafo::remove_vertice(int id){
+    //renover a adjacencia de todos os vertices que apontam para esse
+    //remover a adjacencia de todos os vertices que esse aponta
+    for(auto it = this->hash_vertices_grafo.begin(); it != this->hash_vertices_grafo.end(); it++){
+        it->second->remove_adjacencia(id);
+        it->second->remove_antecessor(id);
+    }
+    //remover o vertice do hash
     if(busca_vertice(id) != NULL){
         this->hash_vertices_grafo.erase(id);
-        
         return true;
     }
     else {
