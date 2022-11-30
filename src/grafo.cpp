@@ -4,9 +4,8 @@
 
 using namespace std;
 
-Grafo::Grafo(string path_arquivo_entrada,int ordem, bool ehDirecionado, bool peso_vertice, bool peso_aresta){
+Grafo::Grafo(string path_arquivo_entrada, bool ehDirecionado, bool peso_vertice, bool peso_aresta){
     this->path_arquivo_entrada = path_arquivo_entrada;
-    this->ordem = ordem;
     this->ehDirecionado = ehDirecionado;
     this->peso_vertice = peso_vertice;
     this->peso_aresta = peso_aresta;
@@ -136,7 +135,6 @@ void Grafo::carrega_grafo(){
             cout << "não foi possivel abrir o arquivo " << endl;
         }
 }
-//funcionando por enquando somente com grafos não direcionados
 void Grafo::salva_grafo(string path_arquivo_entrada) {
     fstream arquivo_graphviz;
     arquivo_graphviz.open(path_arquivo_entrada,ios::out);

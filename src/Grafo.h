@@ -24,7 +24,7 @@ private:
     string path_arquivo_entrada;
 public:
     //iniciando o construtor com alguns valores já predefinidos
-    Grafo(string path_arquivo_entrada,int ordem, bool ehDirecionado, bool peso_vertice, bool peso_aresta);
+    Grafo(string path_arquivo_entrada, bool ehDirecionado, bool peso_vertice, bool peso_aresta);
     ~Grafo();
 
     vector<Aresta*> arestas_grafo;
