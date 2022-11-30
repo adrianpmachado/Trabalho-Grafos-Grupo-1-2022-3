@@ -30,10 +30,11 @@ public:
 
     Vertice* get_primeiro_vertice();
     Vertice* get_ultimo_vertice();
-    void insere_vertice(int id); //funcionando
-    void remove_vertice(int id);
+    bool insere_vertice(int id); //funcionando
+    bool remove_vertice(int id);
     bool existe_vertice(int id); //funcionando
     Vertice* busca_vertice(int id); //funcionando
+    int get_indice_vertice(int id);
     void insere_aresta(int id_saida,int id_destino, bool direcionado, float peso); //funcionando apenas para grafos não direcionados
     bool existe_Aresta(int id_saida, int id_destino, bool direcionado, float peso); //funcionando apenas para grafos não direcionados
     void imprimir_grafo_lista_de_adjacencia();

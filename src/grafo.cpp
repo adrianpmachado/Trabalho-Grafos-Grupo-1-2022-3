@@ -14,15 +14,28 @@ Grafo::Grafo(string path_arquivo_entrada,int ordem, bool ehDirecionado, bool pes
 };
 
 //inserindo vertice
-void Grafo::insere_vertice(int id){
+bool Grafo::insere_vertice(int id){
+    //verificar se o vertice já foi inserido
     if(existe_vertice(id)){
-        cout  << "O vertice de id " << id << " já foi inserido no grafo" << endl;
+        return false;
     }
     else {
         Vertice* vertice_aux = new Vertice(id);
         vertices_grafo.push_back(vertice_aux);
+        return true;
     }
 };
+
+bool Grafo::remove_vertice(int id){
+    int id_vertice = get_indice_vertice(id);
+    if(id_vertice != -1){
+        vertices_grafo.erase(vertices_grafo.begin()+id_vertice);
+        return true;
+    }
+    else{
+        return false;
+    }
+}
 
 bool Grafo::existe_vertice(int id){
     //percorer todos os vertices para ver se ja foi inserido
@@ -37,10 +50,21 @@ bool Grafo::existe_vertice(int id){
 Vertice* Grafo::busca_vertice(int id){
     for(Vertice* vertice_aux :vertices_grafo){
         if(vertice_aux->get_id() == id){
-            return vertice_aux; //encontrou com o mesmo id, retorna o ponteiro
+            return vertice_aux;
         } 
     }
     return nullptr; // não encotrou
+}
+
+int Grafo::get_indice_vertice(int id){
+    int i = 0;
+    for(Vertice* vertice_aux :vertices_grafo){
+        if(vertice_aux->get_id() == id){
+            return i;
+        } 
+        i++;
+    }
+    return -1; // não encotrou
 }
 
 //inserindo Aresta 
@@ -97,6 +121,7 @@ bool Grafo::existe_Aresta(int id_saida, int id_destino, bool direcionado, float 
 }
 
 void Grafo::imprimir_grafo_lista_de_adjacencia(){
+    cout << "esta chegando aqui" << endl;
     for(Vertice* vertixe_aux : vertices_grafo){
         cout << vertixe_aux->get_id() << " - ";
         vertixe_aux->imprime_adjacencias();
@@ -114,6 +139,7 @@ void Grafo::carrega_grafo(){
         arquivo_grafos >> ordem_grafo;
         if((!ehDirecionado)&&(!peso_vertice)&&(!peso_aresta)){
             while(arquivo_grafos>>id_saida>>id_destino){
+                cout << id_saida << " - " << id_destino << endl;
                 this->insere_aresta(id_saida,id_destino,false,0);
             }
         }
