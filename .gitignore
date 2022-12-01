@@ -33,5 +33,6 @@
 
 #pasta com os grafos
 *.txt
+*.dot
 *.pdf
 execGrupoX

@@ -88,16 +88,12 @@ void Grafo::insere_aresta(int id_saida,int id_destino, float peso){
     }
 }
 bool Grafo::existe_Aresta(int id_saida, int id_destino, float peso){
-    if(ehDirecionado && (peso_aresta || peso_vertice)){
-        for(Aresta* aresta_aux : this->arestas_grafo){
-            if(aresta_aux.get_id_saida() == id_saida && aresta_aux.get_id_destino() == id_destino && aresta_aux.get_peso() == peso){
-                return true;
-            }
-        }
+    //verificar se a aresta está no vector de arestas
+    for(Aresta* aresta_aux :arestas_grafo){
+        if((aresta_aux->get_id_saida()==id_saida)&&(aresta_aux->get_id_destino()==id_destino))
+            return true;
     }
-    else{
-
-    }
+    return false;
 }
 
 void Grafo::imprimir_grafo_lista_de_adjacencia(){
