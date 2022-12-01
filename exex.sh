@@ -1,5 +1,5 @@
 #!/bin/bash
-g++ src/*.cpp -o execGrupo1
+g++ *.cpp -o execGrupo1
 ./execGrupo1 "instancias Grafos não ponderados/grafo_1000_1.txt" "saidas/arquivo1.dot" 0 0 0
 ./execGrupo1 "instancias Grafos não ponderados/grafo_1000_2.txt" "saidas/arquivo2.dot" 0 0 0
 ./execGrupo1 "instancias Grafos não ponderados/grafo_1000_3.txt" "saidas/arquivo3.dot" 0 0 0
