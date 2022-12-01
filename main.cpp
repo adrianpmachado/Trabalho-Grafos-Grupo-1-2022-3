@@ -2,6 +2,8 @@
 #include <string>
 #include <list>
 #include "Grafo.h"
+#include <sstream>
+
 
 using namespace std;
 
@@ -19,9 +21,9 @@ int main (int argc, char * argv[])
 
     string caminho_entrada = argv [1];
     string caminho_saida = argv[2];
-    istringstream(argv[3])>>Opc_Direc;
-    istringstream(argv[4])>>Opc_Peso_Aresta;
-    istringstream(argv[5])>>Opc_Peso_Nos;
+    std::istringstream(argv[3])>>Opc_Direc;
+    std::istringstream(argv[4])>>Opc_Peso_Aresta;
+    std::istringstream(argv[5])>>Opc_Peso_Nos;
     Grafo* grafo01 = new Grafo(caminho_entrada,0,0,0);
     grafo01->salva_grafo(caminho_saida);
     return 0;
