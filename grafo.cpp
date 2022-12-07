@@ -97,10 +97,13 @@ bool Grafo::existe_Aresta(int id_saida, int id_destino, float peso){
 }
 
 void Grafo::imprimir_grafo_lista_de_adjacencia(){
+    //percorre os vertices 
     for(auto vertice_aux : this->hash_vertices_grafo){
         cout << "Vertice: " << vertice_aux.second->get_id() << endl;
+        //chama uma função auxiliar dentro da classe dos vertices para imprimir adjacencias
         vertice_aux.second->imprime_adjacencias();
     }
+    //TODO: FALTA IMPRIMIR DIRECIONADOS 
 }
 void Grafo::carrega_grafo(){
     //abrir o arquivo
@@ -123,6 +126,21 @@ void Grafo::carrega_grafo(){
             }
         }
         else if((!ehDirecionado)&&(!peso_vertice)&&(peso_aresta)){
+            while(arquivo_grafos>>id_saida>>id_destino>>valor_peso){
+                this->insere_aresta(id_saida,id_destino,valor_peso);
+            }
+        }
+        else if((ehDirecionado)&&(!peso_vertice)&&(!peso_aresta)){
+            while(arquivo_grafos>>id_saida>>id_destino){
+                this->insere_aresta(id_saida,id_destino,0);
+            }
+        }
+        else if((ehDirecionado)&&(peso_vertice)&&(!peso_aresta)){
+            while(arquivo_grafos>>id_saida>>id_destino>>valor_peso){
+                this->insere_aresta(id_saida,id_destino,valor_peso);
+            }
+        }
+        else if((ehDirecionado)&&(!peso_vertice)&&(peso_aresta)){
             while(arquivo_grafos>>id_saida>>id_destino>>valor_peso){
                 this->insere_aresta(id_saida,id_destino,valor_peso);
             }
@@ -152,4 +170,5 @@ void Grafo::salva_grafo(string path_arquivo_saida) {
     else{
         cout << "arquivo de escrita não foi aberto" << endl;
     }
+    //TODO: FALTA SALVAR GRAFO DIRECIONADO
 }
