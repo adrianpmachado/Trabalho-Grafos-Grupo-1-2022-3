@@ -150,6 +150,6 @@ void Grafo::salva_grafo(string path_arquivo_saida) {
         arquivo_graphviz << "}";
     }
     else{
-        cout << "arquivo não foi aberto" << endl;
+        cout << "arquivo de escrita não foi aberto" << endl;
     }
 }

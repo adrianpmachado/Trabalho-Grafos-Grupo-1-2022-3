@@ -8,7 +8,6 @@ g++ *.cpp -o execGrupo1
 ./execGrupo1 "instancias Grafos não ponderados/grafo_1000_6.txt" "saidas/arquivo6.dot" 0 0 0
 ./execGrupo1 "instancias Grafos não ponderados/grafo_1000_7.txt" "saidas/arquivo7.dot" 0 0 0
 ./execGrupo1 "instancias Grafos não ponderados/grafo_1000_8.txt" "saidas/arquivo8.dot" 0 0 0
-
 ./execGrupo1 "instancias Grafos não ponderados/grafo_10000_1.txt" "saidas/arquivo9.dot" 0 0 0
 ./execGrupo1 "instancias Grafos não ponderados/grafo_10000_2.txt" "saidas/arquivo10.dot" 0 0 0
 ./execGrupo1 "instancias Grafos não ponderados/grafo_10000_3.txt" "saidas/arquivo11.dot" 0 0 0
