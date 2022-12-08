@@ -1,7 +1,10 @@
 {
-    "files.associations": {
-        "list": "cpp"
-    },
-    "editor.tabCompletion": "on",
-    "diffEditor.codeLens": true
+  "files.associations": {
+    "list": "cpp",
+    "ostream": "cpp",
+    "fstream": "cpp",
+    "new": "cpp"
+  },
+  "editor.tabCompletion": "on",
+  "diffEditor.codeLens": true
 }
