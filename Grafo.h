@@ -25,8 +25,8 @@ private:
 public:
     // iniciando o construtor com alguns valores já predefinidos
     Grafo(string path_arquivo_entrada, bool ehDirecionado, bool peso_vertice, bool peso_aresta);
+    Grafo(bool direcionado, bool peso_vertice, bool peso_aresta);
     ~Grafo();
-
     vector<Aresta *> arestas_grafo;
     map<int, Vertice *> hash_vertices_grafo;
 

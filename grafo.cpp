@@ -13,6 +13,13 @@ Grafo::Grafo(string path_arquivo_entrada, bool direcionado, bool peso_vertice, b
     this->carrega_grafo();
 };
 
+Grafo::Grafo(bool direcionado, bool peso_vertice, bool peso_aresta)
+{
+    this->direcionado = direcionado;
+    this->peso_vertice = peso_vertice;
+    this->peso_aresta = peso_aresta;
+};
+
 bool Grafo::insere_vertice(int id)
 {
     // verificar se o vertice já foi inserido

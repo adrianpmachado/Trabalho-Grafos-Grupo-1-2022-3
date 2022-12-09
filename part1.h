@@ -43,16 +43,38 @@ void grafoIntersecao(Grafo *grafo)
 {
 	Grafo *novo_grafo = obter_novo_grafo(grafo->obter_direcionado(), grafo->obter_peso_vertice(), grafo->obter_peso_aresta());
 
-	Vertice *vertice_aux = novo_grafo->obter_primeiro_vertice()
+	Vertice *vertice_aux = novo_grafo->obter_primeiro_vertice();
 
-														 return;
+	return;
 }
 
 void grafo_uniao(Grafo *grafo)
 {
 	Grafo *novo_grafo = obter_novo_grafo(grafo->obter_direcionado(), grafo->obter_peso_vertice(), grafo->obter_peso_aresta());
+	Grafo *grafo_final = new Grafo(grafo->obter_direcionado(), grafo->obter_peso_vertice(), grafo->obter_peso_aresta());
 
-	// unir grafo com novo grafo
+	vector<pair<int, int>> arestas_inseridas;
+	for (auto aresta_aux : grafo->arestas_grafo)
+	{
+		pair<int, int> aux = {aresta_aux->obter_id_saida(), aresta_aux->obter_id_destino()};
+		grafo_final->insere_aresta(aux.first, aux.second, aresta_aux->obter_peso());
+		arestas_inseridas.push_back(aux);
+	}
+
+	for (auto aresta_aux : novo_grafo->arestas_grafo)
+	{
+		pair<int, int> aux = {aresta_aux->obter_id_saida(), aresta_aux->obter_id_destino()};
+		if (find(arestas_inseridas.begin(), arestas_inseridas.end(), item) != arestas_inseridas.end())
+		{
+			continue;
+		}
+		if (!grafo->obter_direcionado() && find(arestas_inseridas.begin(), arestas_inseridas.end(), {aux.second, aux.first}) != arestas_inseridas.end())
+		{
+			continue;
+		}
+
+		grafo_final->insere_aresta(aux.first, aux.second, aresta_aux->obter_peso());
+	}
 
 	return;
 }
