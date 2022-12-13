@@ -3,7 +3,8 @@
     "list": "cpp",
     "ostream": "cpp",
     "fstream": "cpp",
-    "new": "cpp"
+    "new": "cpp",
+    "iostream": "cpp"
   },
   "editor.tabCompletion": "on",
   "diffEditor.codeLens": true

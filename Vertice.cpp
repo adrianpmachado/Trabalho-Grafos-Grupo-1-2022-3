@@ -70,9 +70,9 @@ Aresta *Vertice::insere_aresta(int id_saida, int id_destino, float peso)
 
 void Vertice::imprime_adjacencias()
 {
-    for (auto it = this->vertices_adjacentes.begin(); it != this->vertices_adjacentes.end(); it++)
+    for (auto it : vertices_adjacentes)
     {
-        cout << " [" << it->second->obter_id() << "]";
+        cout << " -> [" << it.second->obter_id() << "]";
     }
 }
 

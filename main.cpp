@@ -21,8 +21,8 @@ int main(int argc, char *argv[])
     std::istringstream(argv[3]) >> Opc_Direc;
     std::istringstream(argv[4]) >> Opc_Peso_Aresta;
     std::istringstream(argv[5]) >> Opc_Peso_Nos;
-    Grafo *grafo01 = new Grafo(caminho_entrada, Opc_Direc, Opc_Peso_Aresta, Opc_Peso_Nos);
-    escolheOperacao(menu(), grafo01);
+    Grafo *grafo_inicial = new Grafo(caminho_entrada, Opc_Direc, Opc_Peso_Aresta, Opc_Peso_Nos);
+    realiza_operacao(menu(), grafo_inicial, caminho_saida);
 
     return 0;
 }

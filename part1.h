@@ -16,14 +16,14 @@ Grafo *obter_novo_grafo(bool direcionado, bool peso_vertice, bool peso_aresta)
 
 	mensagem += "direcionado,";
 
-	if (peso_vertice)
+	if (!peso_vertice)
 	{
 		mensagem += " não";
 	}
 
 	mensagem += " ponderado em vértices e";
 
-	if (peso_aresta)
+	if (!peso_aresta)
 	{
 		mensagem += " não";
 	}
@@ -34,52 +34,46 @@ Grafo *obter_novo_grafo(bool direcionado, bool peso_vertice, bool peso_aresta)
 
 	string caminho;
 	cin >> caminho;
-	Grafo *novoGrafo = new Grafo(caminho, direcionado, peso_vertice, peso_aresta());
+	cout << endl;
+	Grafo *novoGrafo = new Grafo(caminho, direcionado, peso_vertice, peso_aresta);
 
 	return novoGrafo;
 };
 
-void grafoIntersecao(Grafo *grafo)
+void grafo_intersecao(Grafo *grafo, string caminho_saida)
 {
-	Grafo *novo_grafo = obter_novo_grafo(grafo->obter_direcionado(), grafo->obter_peso_vertice(), grafo->obter_peso_aresta());
-
-	Vertice *vertice_aux = novo_grafo->obter_primeiro_vertice();
+	grafo->salva_grafo(caminho_saida);
 
 	return;
 }
 
-void grafo_uniao(Grafo *grafo)
+void grafo_uniao(Grafo *grafo, string caminho_saida)
 {
 	Grafo *novo_grafo = obter_novo_grafo(grafo->obter_direcionado(), grafo->obter_peso_vertice(), grafo->obter_peso_aresta());
-	Grafo *grafo_final = new Grafo(grafo->obter_direcionado(), grafo->obter_peso_vertice(), grafo->obter_peso_aresta());
 
-	vector<pair<int, int>> arestas_inseridas;
-	for (auto aresta_aux : grafo->arestas_grafo)
-	{
-		pair<int, int> aux = {aresta_aux->obter_id_saida(), aresta_aux->obter_id_destino()};
-		grafo_final->insere_aresta(aux.first, aux.second, aresta_aux->obter_peso());
-		arestas_inseridas.push_back(aux);
-	}
-
+	cout << "Unindo os grafos..." << endl;
 	for (auto aresta_aux : novo_grafo->arestas_grafo)
 	{
-		pair<int, int> aux = {aresta_aux->obter_id_saida(), aresta_aux->obter_id_destino()};
-		if (find(arestas_inseridas.begin(), arestas_inseridas.end(), item) != arestas_inseridas.end())
-		{
-			continue;
-		}
-		if (!grafo->obter_direcionado() && find(arestas_inseridas.begin(), arestas_inseridas.end(), {aux.second, aux.first}) != arestas_inseridas.end())
-		{
-			continue;
-		}
-
-		grafo_final->insere_aresta(aux.first, aux.second, aresta_aux->obter_peso());
+		grafo->insere_aresta(aresta_aux->obter_id_saida(), aresta_aux->obter_id_destino(), aresta_aux->obter_peso());
 	}
+	for (auto vertice_aux : novo_grafo->hash_vertices_grafo)
+	{
+		if (vertice_aux.second->obter_grau_entrada() == 0 && vertice_aux.second->obter_grau_saida() == 0)
+		{
+			grafo->insere_vertice(vertice_aux.second->obter_id());
+		}
+	}
+	cout << "União finalizada." << endl;
+	cout << "\nGrafo resultado:\n";
+
+	grafo->imprimir_grafo_lista_de_adjacencia();
+	cout << endl;
+	grafo->salva_grafo(caminho_saida);
 
 	return;
 }
 
-void grafoDiferenca()
+void grafo_diferenca()
 {
 	return;
 }
@@ -89,23 +83,25 @@ void redePert()
 	return;
 }
 
-void escolheOperacao(int option, Grafo *grafo)
+void realiza_operacao(int option, Grafo *grafo, string caminho_saida)
 {
 	switch (option)
 	{
 	case 1:
-		grafoIntersecao(grafo);
+		grafo_intersecao(grafo, caminho_saida);
 		break;
 	case 2:
-		grafoUniao(grafo);
+		grafo_uniao(grafo, caminho_saida);
 		break;
 	case 3:
-		grafoDiferenca();
+		grafo_diferenca();
 		break;
 	default:
-		cout << "Opção inválida! Tente novamente" << endl;
-		break;
+		cout << "Opção inválida!" << endl;
+		exit(1);
 	}
+
+	exit(0);
 }
 
 int menu()

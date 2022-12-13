@@ -36,3 +36,9 @@
 *.dot
 *.pdf
 execGrupoX
+
+#grafo gerado
+grafo.png
+
+#window script
+*.bat
