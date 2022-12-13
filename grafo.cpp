@@ -124,14 +124,16 @@ void Grafo::imprimir_grafo_lista_de_adjacencia()
     // percorre os vertices
     for (auto vertice_aux : this->hash_vertices_grafo)
     {
-        cout << "Vertice: " << vertice_aux.second->obter_id() << endl;
+        cout << "\n[" << vertice_aux.second->obter_id() << "]";
         // chama uma função auxiliar dentro da classe dos vertices para imprimir adjacencias
         vertice_aux.second->imprime_adjacencias();
     }
+    cout << endl;
     // TODO: FALTA IMPRIMIR DIRECIONADOS
 }
 void Grafo::carrega_grafo()
 {
+    cout << "Lendo grafo em \"" + path_arquivo_entrada + "\"" << endl;
     // abrir o arquivo
     int ordem_grafo;
     int id_saida;
@@ -192,32 +194,38 @@ void Grafo::carrega_grafo()
 }
 void Grafo::salva_grafo(string path_arquivo_saida)
 {
+    cout << "Salvando grafo em \"" + path_arquivo_saida + "\"" << endl;
     fstream arquivo_graphviz;
     arquivo_graphviz.open(path_arquivo_saida, ios::out);
-    if (arquivo_graphviz.is_open())
+
+    if (!arquivo_graphviz.is_open())
     {
-        arquivo_graphviz << "graph grafo {" << endl;
-        if (direcionado)
-        {
-            for (auto aresta_aux : arestas_grafo)
-            {
-                arquivo_graphviz << aresta_aux->obter_id_saida() << "->" << aresta_aux->obter_id_destino() << endl;
-            }
-        }
-        else
-        {
-            for (auto aresta_aux : arestas_grafo)
-            {
-                arquivo_graphviz << aresta_aux->obter_id_saida() << "--" << aresta_aux->obter_id_destino() << endl;
-            }
-        }
-        arquivo_graphviz << "}";
+        cout << "Erro abrindo arquivo de escrita!" << endl;
+        exit(1);
+    }
+
+    string conector;
+    if (direcionado)
+    {
+        arquivo_graphviz << "digraph grafo {" << endl;
+        conector = "->";
     }
     else
     {
-        cout << "arquivo de escrita não foi aberto" << endl;
+        arquivo_graphviz << "graph grafo {" << endl;
+        conector = "--";
     }
-    // TODO: FALTA SALVAR GRAFO DIRECIONADO
+
+    for (auto aresta_aux : arestas_grafo)
+    {
+        arquivo_graphviz << aresta_aux->obter_id_saida() << conector << aresta_aux->obter_id_destino();
+        if (peso_aresta)
+        {
+            arquivo_graphviz << " [label=" << aresta_aux->obter_peso() << "]";
+        }
+        arquivo_graphviz << ";" << endl;
+    }
+    arquivo_graphviz << "}";
 }
 bool Grafo::obter_direcionado()
 {
@@ -231,4 +239,18 @@ bool Grafo::obter_peso_aresta()
 bool Grafo::obter_peso_vertice()
 {
     return peso_vertice;
+}
+
+Grafo *Grafo::clonar()
+{
+    Grafo *grafo_aux = new Grafo(this->direcionado, this->peso_aresta, this->peso_vertice);
+    for (auto vertice_aux : this->hash_vertices_grafo)
+    {
+        grafo_aux->insere_vertice(vertice_aux.second->obter_id());
+    }
+    for (auto aresta_aux : this->arestas_grafo)
+    {
+        grafo_aux->insere_aresta(aresta_aux->obter_id_saida(), aresta_aux->obter_id_destino(), aresta_aux->obter_peso());
+    }
+    return grafo_aux;
 }

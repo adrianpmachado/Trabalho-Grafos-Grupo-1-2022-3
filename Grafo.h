@@ -40,10 +40,11 @@ public:
     bool existe_Aresta(int id_saida, int id_destino);
     void imprimir_grafo_lista_de_adjacencia();
     void carrega_grafo();
-    void salva_grafo(string path_arquivo_entrada);
+    void salva_grafo(string path_arquivo_saida);
     bool obter_direcionado();
     bool obter_peso_vertice();
     bool obter_peso_aresta();
+    Grafo *clonar();
 };
 
 #endif // GRAFO_H_INCLUDED
