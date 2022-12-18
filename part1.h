@@ -43,9 +43,22 @@ void grafoIntersecao(Grafo *grafo)
 {
 	Grafo *novo_grafo = obter_novo_grafo(grafo->obter_direcionado(), grafo->obter_peso_vertice(), grafo->obter_peso_aresta());
 
-	Vertice *vertice_aux = novo_grafo->obter_primeiro_vertice()
+	cout << "Intersecão finalizada." << endl;
+	cout << "\nGrafo resultado:\n";
+	
+	Grafo *intersecao;
+	for (auto aresta_aux : novo_grafo->arestas_grafo)
+	{
+		if(grafo->existe_Aresta(aresta_aux->obter_id_destino(),aresta_aux->obter_id_saida())){
+			intersecao->insere_aresta(aresta_aux->obter_id_saida(), aresta_aux->obter_id_destino(), aresta_aux->obter_peso());
+		}
+	}
+	
+	grafo->imprimir_grafo_lista_de_adjacencia();
+	cout << endl;
+	grafo->salva_grafo(caminho_saida);
 
-														 return;
+	return;
 }
 
 void grafo_uniao(Grafo *grafo)
