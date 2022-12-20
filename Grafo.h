@@ -38,6 +38,7 @@ public:
     int obter_indice_vertice(int id);
     void insere_aresta(int id_saida, int id_destino, float peso);
     bool existe_Aresta(int id_saida, int id_destino);
+    Aresta *obter_aresta(int id_saida, int id_destino);
     void imprimir_grafo_lista_de_adjacencia();
     void carrega_grafo();
     void salva_grafo(string path_arquivo_saida);

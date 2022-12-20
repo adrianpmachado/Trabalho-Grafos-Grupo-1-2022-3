@@ -118,6 +118,15 @@ bool Grafo::existe_Aresta(int id_saida, int id_destino)
     }
     return false;
 }
+Aresta *Grafo::obter_aresta(int id_saida, int id_destino)
+{
+    for (Aresta *aresta_aux : arestas_grafo)
+    {
+        if ((aresta_aux->obter_id_saida() == id_saida) && (aresta_aux->obter_id_destino() == id_destino))
+            return aresta_aux;
+    }
+    return NULL;
+}
 
 void Grafo::imprimir_grafo_lista_de_adjacencia()
 {
