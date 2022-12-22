@@ -22,8 +22,8 @@ public:
     ~Vertice();
 
     // metodos para manutenção dos Vertices e Arestas
-    void adiciona_adjacencia(int id_destino);
-    void adiciona_antecessor(int id_antecessor);
+    void adiciona_adjacencia(Vertice *adjacente);
+    void adiciona_antecessor(Vertice *sucessor);
     void remove_adjacencia(int id);
     void remove_antecessor(int id);
     bool existe_aresta(int id_destino);

@@ -30,6 +30,7 @@ public:
     vector<Aresta *> arestas_grafo;
     map<int, Vertice *> hash_vertices_grafo;
 
+    int obter_ordem(); // funcionando
     Vertice *obter_primeiro_vertice();
     Vertice *obter_ultimo_vertice();
     bool insere_vertice(int id); // funcionando

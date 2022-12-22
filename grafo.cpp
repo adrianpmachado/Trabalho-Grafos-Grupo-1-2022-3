@@ -73,39 +73,18 @@ void Grafo::insere_aresta(int id_saida, int id_destino, float peso)
     Vertice *vertice_aux_01 = this->busca_vertice(id_saida);
     // criand um ponteiro para um vettice para podermos manipular o vertice de entrada
     Vertice *vertice_aux_02 = this->busca_vertice(id_destino);
+
     if (vertice_aux_01 != nullptr && vertice_aux_02 != nullptr)
     {
-        // verificar se existe algum vertice no grafo, se existir verificar e existe o de saida e o de destino em especifico
-        if (this->direcionado)
+        Aresta *nova_aresta = new Aresta(id_saida, id_destino, this->direcionado, peso);
+        vertice_aux_01->adiciona_adjacencia(vertice_aux_02);
+        vertice_aux_02->adiciona_antecessor(vertice_aux_01);
+        if (!this->direcionado)
         {
-            // criando um vertice auxiliar para podemos depois salvar na lista de arestas do grafo
-            Aresta *aresta_aux_01;
-            // inserindo uma aresta não direcinonada no vertice
-            aresta_aux_01 = vertice_aux_01->insere_aresta(id_saida, id_destino, peso);
-            // adicionando +1 ao grau de saida já que é direcionado
-            vertice_aux_01->set_grau_saida(vertice_aux_01->obter_grau_saida() + 1);
-            // adicionando +1 ao grau entrada, já que é direcionado
-            vertice_aux_02->set_grau_entrada(vertice_aux_02->obter_grau_entrada() + 1);
-            // adicionando a aresta na lista de arestas do grafo
-            this->arestas_grafo.push_back(aresta_aux_01);
+            vertice_aux_01->adiciona_antecessor(vertice_aux_02);
+            vertice_aux_02->adiciona_adjacencia(vertice_aux_01);
         }
-        else
-        {
-            // criando dois vertices auxiliares para podemos depois salvar na lista de arestas dos grafos
-            Aresta *aresta_aux_01;
-            Aresta *aresta_aux_02;
-            // inserindo uma aresta não direcinonada nos vertices
-            aresta_aux_01 = vertice_aux_01->insere_aresta(id_saida, id_destino, peso);
-            aresta_aux_02 = vertice_aux_02->insere_aresta(id_destino, id_saida, peso);
-            // adicionando +1 ao grau de saida e entrada, já que direcionado == 0
-            vertice_aux_01->set_grau_saida(vertice_aux_01->obter_grau_saida() + 1);
-            vertice_aux_01->set_grau_entrada(vertice_aux_01->obter_grau_entrada() + 1);
-            // adicionando +1 ao grau de saida e entrada, já que não é direcionado
-            vertice_aux_02->set_grau_saida(vertice_aux_02->obter_grau_saida() + 1);
-            vertice_aux_02->set_grau_entrada(vertice_aux_02->obter_grau_entrada() + 1);
-            // adicionando a aresta na lista de arestas do grafo
-            this->arestas_grafo.push_back(aresta_aux_01);
-        }
+        this->arestas_grafo.push_back(nova_aresta);
     }
 }
 bool Grafo::existe_Aresta(int id_saida, int id_destino)
@@ -248,6 +227,11 @@ bool Grafo::obter_peso_aresta()
 bool Grafo::obter_peso_vertice()
 {
     return peso_vertice;
+}
+
+int Grafo::obter_ordem()
+{
+    return this->hash_vertices_grafo.size();
 }
 
 Grafo *Grafo::clonar()
