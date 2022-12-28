@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <list>
-#include "../Grafo.h"
+#include "Grafo.h"
 #include <sstream>
 #include "funcionalidades.h"
 
@@ -16,7 +16,12 @@ int main(int argc, char *argv[])
     string caminho_entrada = argv[1];
     string caminho_saida = argv[2];
     Grafo *grafo_inicial = new Grafo(caminho_entrada, false, false, true, 2);
-    grafo_inicial->salva_grafo(caminho_saida);
+    vector<int> solucao = subconjunto_dominante_ponderado(1, grafo_inicial);
+
+    cout << "\nO conjunto de vertices dominantes eh: \n";
+    for(auto vertice : solucao) {
+        cout << vertice << endl;
+    }
 
     return 0;
 }

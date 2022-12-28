@@ -2,7 +2,6 @@
 #ifndef VERTICE_H_INCLUDED
 #define VERTICE_H_INCLUDED
 #include "Aresta.h"
-#include "Vertice.h"
 #include <list>
 #include <map>
 
@@ -16,6 +15,7 @@ private:
     bool foi_visitado = false; // boleano para identificar se o vertice foi visitado ou não
     int grau_entrada = 0;
     int grau_saida = 0;
+    float qualidade = 0;
 
 public:
     Vertice(int id);
@@ -39,12 +39,14 @@ public:
     bool obter_foi_visitado();
     int obter_grau_entrada();
     int obter_grau_saida();
+    float obter_qualidade();
 
     void set_id(int id);
     void set_peso(float peso);
     void set_foi_visitado(bool foi_visitado);
     void set_grau_entrada(int grau_entrada);
     void set_grau_saida(int grau_saida);
+    void set_qualidade(float qualidade);
     void imprime_adjacencias();
 };
 #endif // VERTICE_H_INCLUDED

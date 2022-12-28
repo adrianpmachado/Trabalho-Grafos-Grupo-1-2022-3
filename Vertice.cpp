@@ -95,3 +95,13 @@ void Vertice::remove_antecessor(int id)
         }
     }
 }
+
+void Vertice::set_qualidade(float qualidade)
+{
+    this->qualidade = qualidade;
+}
+
+float Vertice::obter_qualidade()
+{
+    return this->qualidade;
+}   
