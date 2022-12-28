@@ -105,3 +105,13 @@ float Vertice::obter_qualidade()
 {
     return this->qualidade;
 }   
+
+void Vertice::set_foi_coberto(bool foi_coberto)
+{
+    this->foi_coberto = foi_coberto;
+}
+
+bool Vertice::obter_foi_coberto()
+{
+    return this->foi_coberto;
+}   

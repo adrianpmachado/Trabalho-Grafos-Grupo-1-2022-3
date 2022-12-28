@@ -13,6 +13,7 @@ private:
     int id;                    // inteiro para identificar o vértice
     float peso = 0;            // peso do vertice
     bool foi_visitado = false; // boleano para identificar se o vertice foi visitado ou não
+    bool foi_coberto = false; // boleano para identificar se o vertice foi coberto ou não
     int grau_entrada = 0;
     int grau_saida = 0;
     float qualidade = 0;
@@ -39,11 +40,13 @@ public:
     bool obter_foi_visitado();
     int obter_grau_entrada();
     int obter_grau_saida();
+    bool obter_foi_coberto();
     float obter_qualidade();
 
     void set_id(int id);
     void set_peso(float peso);
     void set_foi_visitado(bool foi_visitado);
+    void set_foi_coberto(bool foi_coberto);
     void set_grau_entrada(int grau_entrada);
     void set_grau_saida(int grau_saida);
     void set_qualidade(float qualidade);

@@ -8,13 +8,57 @@
 
 using namespace std;
 
-float calcula_qualidade(Vertice *vertice)
+float calcula_peso(Grafo *grafo, vector<int> const &solucao)
 {
-  return vertice->obter_grau_entrada() / vertice->obter_peso();
+  float peso = 0;
+  for(auto vertice_id : solucao)
+  {
+    peso+= grafo->busca_vertice(vertice_id)->obter_peso();
+  }
+  return peso;
 }
 
-vector<int> obter_solucao_inicial(map<int, Vertice *> candidatos)
+float calcula_qualidade(Vertice *vertice)
 {
+  if(vertice->obter_foi_visitado())
+    return 0;
+
+  int vertices_nao_cobertos = 0;
+  for(auto vizinho : vertice->vertices_adjacentes)
+  {
+    if(!vizinho.second->obter_foi_coberto())
+      vertices_nao_cobertos++;
+  }
+
+  if(!vertice->obter_foi_coberto())
+    vertices_nao_cobertos++;
+
+  return vertices_nao_cobertos / vertice->obter_peso();
+}
+
+int adiciona_solucao(vector<int> &solucao, Vertice *vertice)
+{
+  int vertices_cobertos = 0;
+  solucao.push_back(vertice->obter_id());
+  vertice->set_foi_visitado(true);
+
+  if(!vertice->obter_foi_coberto())
+    vertices_cobertos++;
+
+  vertice->set_foi_coberto(true);
+
+  for(auto vizinho : vertice->vertices_adjacentes)
+  {
+    if(!vizinho.second->obter_foi_coberto())
+      vertices_cobertos++;
+    vizinho.second->set_foi_coberto(true);
+  }
+  return vertices_cobertos;
+}
+
+vector<int> obter_solucao_inicial(map<int, Vertice *> candidatos, int &total_vertices_cobertos)
+{
+  total_vertices_cobertos = 0;
   vector<int> solucao;
   for(auto vertice : candidatos)
   {
@@ -23,10 +67,8 @@ vector<int> obter_solucao_inicial(map<int, Vertice *> candidatos)
     esta_na_solucao |= vertice.second->obter_peso() <= 0;
     if(esta_na_solucao)
     {
-      solucao.push_back(vertice.second->obter_id());
-      vertice.second->set_foi_visitado(true);
+      total_vertices_cobertos += adiciona_solucao(solucao, vertice.second);
     } else {
-      vertice.second->set_foi_visitado(false);
       vertice.second->set_qualidade(calcula_qualidade(vertice.second));
     }
   }
@@ -45,21 +87,6 @@ void atualiza_candidatos(vector<Vertice *> &candidatos)
       continue;
     }
 
-    bool vizinho_na_solucao = false;
-    for(auto vizinho : vertice_aux->vertices_adjacentes)
-    {
-      vizinho_na_solucao |= vizinho.second->obter_foi_visitado();
-      if(vizinho_na_solucao)
-      {
-        break;
-      }
-    }
-
-    if(vizinho_na_solucao)
-    {
-      it = candidatos.erase(it);
-      continue;
-    }
     vertice_aux->set_qualidade(calcula_qualidade(vertice_aux));
     it++;
   }
@@ -73,7 +100,9 @@ bool ordena_candidatos(Vertice *vertice1, Vertice *vertice2)
 vector<int> guloso(Grafo *grafo)
 {
   cout << "Executando o algoritmo guloso..." << endl;
-  vector<int> solucao = obter_solucao_inicial(grafo->hash_vertices_grafo);
+ 
+  int vertices_cobertos = 0;
+  vector<int> solucao = obter_solucao_inicial(grafo->hash_vertices_grafo, vertices_cobertos);
 
   vector<Vertice *> lista_candidatos;
   for(auto vertice : grafo->hash_vertices_grafo)
@@ -84,11 +113,22 @@ vector<int> guloso(Grafo *grafo)
     }
   }
 
-  while(lista_candidatos.size() > 0)
+  while(vertices_cobertos < grafo->obter_ordem())
   {
-    sort(lista_candidatos.begin(), lista_candidatos.end(), ordena_candidatos);
-    solucao.push_back(lista_candidatos.at(0)->obter_id());
-    lista_candidatos.at(0)->set_foi_visitado(true);
+    float melhor_qualidade = 0;
+    Vertice *melhor_candidato = lista_candidatos.at(0);
+
+    // obter melhor candidato
+    for(int i = 1; i < lista_candidatos.size(); i++)
+    {
+      if(lista_candidatos.at(i)->obter_qualidade() > melhor_qualidade)
+      {
+        melhor_qualidade = lista_candidatos.at(i)->obter_qualidade();
+        melhor_candidato = lista_candidatos.at(i);
+      }
+    }
+
+    vertices_cobertos += adiciona_solucao(solucao, melhor_candidato);
     atualiza_candidatos(lista_candidatos);
   }
 
@@ -98,13 +138,15 @@ vector<int> guloso(Grafo *grafo)
 
 vector<int> guloso_randomizado(Grafo *grafo)
 {
-  return obter_solucao_inicial(grafo->hash_vertices_grafo);
+  int vertices_cobertos = 0;
+  return obter_solucao_inicial(grafo->hash_vertices_grafo, vertices_cobertos);
 }
 
 
 vector<int> guloso_randomizado_reativo(Grafo *grafo)
 {
-  return obter_solucao_inicial(grafo->hash_vertices_grafo);
+  int vertices_cobertos = 0;
+  return obter_solucao_inicial(grafo->hash_vertices_grafo, vertices_cobertos);
 }
 
 
