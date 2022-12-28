@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
-#include "Grafo.h"
+#include "../Grafo.h"
 #include "math.h"
 #include "rede-pert.h"
 
 using namespace std;
 
-Grafo *obter_novo_grafo(bool direcionado, bool peso_vertice, bool peso_aresta)
+Grafo *obter_novo_grafo(bool direcionado, bool peso_aresta, bool peso_vertice)
 {
 	string mensagem = "Insira um caminho para um grafo ";
 	if (!direcionado)
@@ -30,7 +30,7 @@ Grafo *obter_novo_grafo(bool direcionado, bool peso_vertice, bool peso_aresta)
 	cout << endl;
 	string caminho;
 	cin >> caminho;
-	Grafo *novoGrafo = new Grafo(caminho, direcionado, peso_vertice, peso_aresta);
+	Grafo *novoGrafo = new Grafo(caminho, direcionado, peso_aresta, peso_vertice, 1);
 	return novoGrafo;
 };
 
@@ -43,7 +43,7 @@ void grafo_intersecao(Grafo *grafo, string caminho_saida)
 
 void grafo_uniao(Grafo *grafo, string caminho_saida)
 {
-	Grafo *novo_grafo = obter_novo_grafo(grafo->obter_direcionado(), grafo->obter_peso_vertice(), grafo->obter_peso_aresta());
+	Grafo *novo_grafo = obter_novo_grafo(grafo->obter_direcionado(), grafo->obter_peso_aresta(), grafo->obter_peso_vertice());
 	cout << "Unindo os grafos..." << endl;
 	for (auto aresta_aux : novo_grafo->arestas_grafo)
 	{

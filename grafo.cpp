@@ -1,38 +1,45 @@
 #include "Grafo.h"
 #include <list>
 #include <fstream>
+#include <limits>
 
 using namespace std;
 
-Grafo::Grafo(string path_arquivo_entrada, bool direcionado, bool peso_vertice, bool peso_aresta)
+Grafo::Grafo(string path_arquivo_entrada, bool direcionado, bool peso_aresta, bool peso_vertice, int parte_trabalho)
 {
     this->path_arquivo_entrada = path_arquivo_entrada;
     this->direcionado = direcionado;
     this->peso_vertice = peso_vertice;
     this->peso_aresta = peso_aresta;
-    this->carrega_grafo();
+
+    if(parte_trabalho == 1) {
+        this->carrega_grafo_1();
+    } else if(parte_trabalho == 2) {
+        this->carrega_grafo_2();
+    }
 };
 
-Grafo::Grafo(bool direcionado, bool peso_vertice, bool peso_aresta)
+Grafo::Grafo(bool direcionado, bool peso_aresta, bool peso_vertice)
 {
     this->direcionado = direcionado;
     this->peso_vertice = peso_vertice;
     this->peso_aresta = peso_aresta;
 };
 
-bool Grafo::insere_vertice(int id)
+Vertice* Grafo::insere_vertice(int id)
 {
+    Vertice *vertice_aux;
     // verificar se o vertice já foi inserido
     if (busca_vertice(id) == NULL)
     {
-        Vertice *vertice_aux = new Vertice(id);
+        vertice_aux = new Vertice(id);
         this->hash_vertices_grafo.insert(pair<int, Vertice *>(id, vertice_aux));
-        return true;
     }
     else
     {
-        return true;
+        vertice_aux = busca_vertice(id);
     }
+    return vertice_aux;
 };
 bool Grafo::remove_vertice(int id)
 {
@@ -119,7 +126,7 @@ void Grafo::imprimir_grafo_lista_de_adjacencia()
     cout << endl;
     // TODO: FALTA IMPRIMIR DIRECIONADOS
 }
-void Grafo::carrega_grafo()
+void Grafo::carrega_grafo_1()
 {
     cout << "Lendo grafo em \"" + path_arquivo_entrada + "\"" << endl;
     // abrir o arquivo
@@ -204,12 +211,20 @@ void Grafo::salva_grafo(string path_arquivo_saida)
         conector = "--";
     }
 
+    if(peso_vertice)
+    {
+        for (auto vertice_aux : hash_vertices_grafo)
+        {
+            arquivo_graphviz << vertice_aux.second->obter_id() << " [weight=" << vertice_aux.second->obter_peso() << "];" << endl;
+        }
+    }
+
     for (auto aresta_aux : arestas_grafo)
     {
         arquivo_graphviz << aresta_aux->obter_id_saida() << conector << aresta_aux->obter_id_destino();
         if (peso_aresta)
         {
-            arquivo_graphviz << " [label=" << aresta_aux->obter_peso() << "]";
+            arquivo_graphviz << " [weight=" << aresta_aux->obter_peso() << "]";
         }
         arquivo_graphviz << ";" << endl;
     }
@@ -246,4 +261,52 @@ Grafo *Grafo::clonar()
         grafo_aux->insere_aresta(aresta_aux->obter_id_saida(), aresta_aux->obter_id_destino(), aresta_aux->obter_peso());
     }
     return grafo_aux;
+}
+
+void Grafo::carrega_grafo_2()
+{
+    int ordem_grafo;
+    fstream arquivo_grafos;
+    string me_ignore;
+
+    cout << "Lendo grafo em \"" + path_arquivo_entrada + "\"..." << endl;
+    arquivo_grafos.open(path_arquivo_entrada, ios::in);
+    if (!arquivo_grafos.is_open())
+    {
+        cout << "não foi possivel abrir o arquivo " << endl;
+        return;
+    }
+
+    arquivo_grafos >> me_ignore;
+    arquivo_grafos >> ordem_grafo;    
+
+    // pular linhas de posições
+    arquivo_grafos.seekg(ios::beg);
+    for(int i=0; i < ordem_grafo + 4; ++i){
+        arquivo_grafos.ignore(numeric_limits<streamsize>::max(),'\n');
+    }
+
+    Vertice *vertice_aux;
+    for(int id_vertice = 1; id_vertice <= ordem_grafo; id_vertice++){
+        float peso_vertice = 0;
+        arquivo_grafos >> peso_vertice;
+        vertice_aux = this->insere_vertice(id_vertice);
+        vertice_aux->set_peso(peso_vertice);
+    }
+
+    arquivo_grafos >> me_ignore;
+
+    for(int id_saida = 1; id_saida <= ordem_grafo; id_saida++){
+        for(int id_destino = 1; id_destino <= ordem_grafo; id_destino++){
+            bool aresta_existe = false;
+            arquivo_grafos >> aresta_existe;
+            if(aresta_existe && id_destino > id_saida){
+                this->insere_aresta(id_saida, id_destino, 0);
+            }
+        }
+    }
+
+    cout << "Grafo carregado com sucesso!" << endl;
+    arquivo_grafos.close();
+    return;
 }

@@ -36,6 +36,8 @@
 *.dot
 *.pdf
 execGrupoX
+**/instancias/**.*
+**/saida/**.*
 
 #grafo gerado
 grafo.png
