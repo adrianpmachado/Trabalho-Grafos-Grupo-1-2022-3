@@ -114,4 +114,11 @@ void Vertice::set_foi_coberto(bool foi_coberto)
 bool Vertice::obter_foi_coberto()
 {
     return this->foi_coberto;
-}   
+}
+
+void Vertice::reiniciar()
+{
+    this->foi_visitado = false;
+    this->foi_coberto = false;
+    this->qualidade = 0;
+}

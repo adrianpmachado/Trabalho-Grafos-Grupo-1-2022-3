@@ -51,5 +51,6 @@ public:
     void set_grau_saida(int grau_saida);
     void set_qualidade(float qualidade);
     void imprime_adjacencias();
+    void reiniciar();
 };
 #endif // VERTICE_H_INCLUDED
