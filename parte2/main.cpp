@@ -16,10 +16,13 @@ int main(int argc, char *argv[])
 
     grafo_inicial->salva_grafo(caminho_saida);
 
-    vector<int> solucao = subconjunto_dominante_ponderado(GULOSO_RANDOMIZADO_REATIVO, grafo_inicial, 0, 2500, 250, {0.05, 0.10, 0.15, 0.30, 0.50} );
+    // vector<int> solucao = subconjunto_dominante_ponderado(GULOSO, grafo_inicial);
+    // vector<int> solucao = subconjunto_dominante_ponderado(GULOSO_RANDOMIZADO, grafo_inicial, 0.1, 500);
+    vector<int> solucao = subconjunto_dominante_ponderado(GULOSO_RANDOMIZADO_REATIVO, grafo_inicial, 0, 2500, 250, {0.05, 0.10, 0.15, 0.30, 0.50});
 
     cout << "\nO conjunto de vertices dominantes eh: \n";
-    for(auto vertice : solucao) {
+    for (auto vertice : solucao)
+    {
         cout << vertice << endl;
     }
 

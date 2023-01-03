@@ -6,7 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include "random.h"
-#define FLOAT_MIN -3.402823466e+38F
+#include <time.h>
 
 using namespace std;
 
@@ -44,7 +44,7 @@ void atualiza_probabilidades(vector<float> &probabilidades, vector<float> const 
     aux.push_back(calc);
     total_aux += calc;
   }
-  for(int i = 0; i < probabilidades.size(); i++)
+  for (int i = 0; i < probabilidades.size(); i++)
   {
     probabilidades.at(i) = aux.at(i) / total_aux;
   }
@@ -54,7 +54,7 @@ void atualiza_medias(vector<float> &media_solucoes, int indice_alfa, float peso_
 {
   float media_antiga = media_solucoes.at(indice_alfa);
   float nova_media;
-  if(media_antiga == 0)
+  if (media_antiga == 0)
     nova_media = peso_solucao;
   else
     nova_media = (media_antiga + peso_solucao) / 2;
@@ -190,36 +190,46 @@ Vertice *guloso_randomizado(vector<Vertice *> &candidatos, const float alfa)
   return candidatos.at(indice_candidato);
 }
 
+/**
+ * @brief Função que realiza a busca local de um subconjunto dominante
+ * @param algoritmo Algoritmo de busca local, sendo:
+ * - GULOSO
+ * - GULOSO_RANDOMIZADO
+ * - GULOSO_RANDOMIZADO_REATIVO
+ * @param grafo Grafo a ser analisado
+ * @param alfa Parâmetro alfa para o algoritmo guloso randomizado (ignorado para os outros algoritmos)
+ * @param num_iteracoes Número de iterações para o algoritmo guloso randomizado e randomizado reativo (ignorado para o algoritmo guloso)
+ * @param bloco Tamanho do bloco para o algoritmo guloso randomizado reativo (ignorado para os outros algoritmos)
+ * @param lista_alfas Lista de alfas para o algoritmo guloso randomizado reativo (ignorado para os outros algoritmos)
+ * @return Vetor com os vértices do subconjunto dominante
+ */
 vector<int> subconjunto_dominante_ponderado(Algoritmo algoritmo, Grafo *grafo, float alfa = 0, int num_iteracoes = 1, int bloco = 1, vector<float> lista_alfas = {0})
 {
+  clock_t tInicio, tFim, tDecorrido;
+  tInicio = clock();
   vector<float> alfas_probabilidades;
   vector<float> alfas_solucoes;
 
+  num_iteracoes = num_iteracoes <= 0 ? 1 : num_iteracoes;
   switch (algoritmo)
   {
-    case GULOSO:
-      num_iteracoes = 1;
-      cout << "Iniciando algoritmo guloso..." << endl;
-      break;
-    case GULOSO_RANDOMIZADO:
-      alfa = normalizar_alfa(alfa);
-      num_iteracoes = num_iteracoes <= 0 ? 1 : num_iteracoes;
-      cout << "Iniciando algoritmo guloso randomizado..." << endl;
-      break;
-    case GULOSO_RANDOMIZADO_REATIVO:
-      if(lista_alfas.size() == 0)
-        lista_alfas.push_back(0);
-      for (int i = 0; i < lista_alfas.size(); i++)
-      {
-        alfas_solucoes.push_back(0);
-        alfas_probabilidades.push_back(1.0 / lista_alfas.size());
-        lista_alfas.at(i) = normalizar_alfa(lista_alfas.at(i));
-      }
-      num_iteracoes = num_iteracoes <= 0 ? 1 : num_iteracoes;
-      cout << "Iniciando algoritmo guloso randomizado reativo..." << endl;
-      break;
-    default:
-      num_iteracoes = 1;
+  case GULOSO_RANDOMIZADO:
+    alfa = normalizar_alfa(alfa);
+    cout << "Iniciando algoritmo guloso randomizado..." << endl;
+    break;
+  case GULOSO_RANDOMIZADO_REATIVO:
+    if (lista_alfas.size() == 0)
+      lista_alfas.push_back(0);
+    for (int i = 0; i < lista_alfas.size(); i++)
+    {
+      alfas_solucoes.push_back(0);
+      alfas_probabilidades.push_back(1.0 / lista_alfas.size());
+      lista_alfas.at(i) = normalizar_alfa(lista_alfas.at(i));
+    }
+    cout << "Iniciando algoritmo guloso randomizado reativo..." << endl;
+    break;
+  default:
+    cout << "Iniciando algoritmo guloso..." << endl;
   }
 
   float peso_melhor_solucao = 0;
@@ -240,11 +250,11 @@ vector<int> subconjunto_dominante_ponderado(Algoritmo algoritmo, Grafo *grafo, f
     }
 
     int indice_alfa = iteracao;
-    if(algoritmo == GULOSO_RANDOMIZADO_REATIVO)
+    if (algoritmo == GULOSO_RANDOMIZADO_REATIVO)
     {
-      if(iteracao >= lista_alfas.size())
+      if (iteracao >= lista_alfas.size())
       {
-        if(iteracao % bloco == 0)
+        if (iteracao % bloco == 0)
         {
           cout << "Iteracao " << iteracao << " - Atualizando probabilidades..." << endl;
           atualiza_probabilidades(alfas_probabilidades, alfas_solucoes, peso_melhor_solucao);
@@ -257,11 +267,9 @@ vector<int> subconjunto_dominante_ponderado(Algoritmo algoritmo, Grafo *grafo, f
     while (vertices_cobertos < grafo->obter_ordem())
     {
       Vertice *vertice_aux;
+
       switch (algoritmo)
       {
-      case GULOSO:
-        vertice_aux = guloso(lista_candidatos);
-        break;
       case GULOSO_RANDOMIZADO:
         vertice_aux = guloso_randomizado(lista_candidatos, alfa);
         break;
@@ -269,11 +277,17 @@ vector<int> subconjunto_dominante_ponderado(Algoritmo algoritmo, Grafo *grafo, f
         vertice_aux = guloso_randomizado(lista_candidatos, alfa);
         break;
       default:
-        guloso(lista_candidatos);
+        vertice_aux = guloso(lista_candidatos);
       }
 
       vertices_cobertos += adiciona_solucao(solucao, vertice_aux);
       atualiza_candidatos(lista_candidatos);
+    }
+
+    if (algoritmo == GULOSO)
+    {
+      melhor_solucao = solucao;
+      break;
     }
 
     float peso_solucao = calcula_peso(grafo, solucao);
@@ -284,13 +298,18 @@ vector<int> subconjunto_dominante_ponderado(Algoritmo algoritmo, Grafo *grafo, f
       cout << "Melhor solucao encontrada: " << peso_melhor_solucao << endl;
     }
 
-    if(algoritmo == GULOSO_RANDOMIZADO_REATIVO)
+    if (algoritmo == GULOSO_RANDOMIZADO_REATIVO)
     {
       atualiza_medias(alfas_solucoes, indice_alfa, peso_solucao);
-
     }
   }
 
-  cout << "Algoritmo finalizado!" << endl;
+  tFim = clock();
+  tDecorrido = ((tFim - tInicio) * 1000) / CLOCKS_PER_SEC;
+
+  cout << "Algoritmo finalizado!\n"
+       << endl;
+  cout << "Tempo decorrido: " << tDecorrido << " ms" << endl;
+
   return melhor_solucao;
 }
