@@ -7,18 +7,30 @@
 #include "random.h"
 
 using namespace std;
-
 int main(int argc, char *argv[])
 {
     string caminho_entrada = argv[1];
     string caminho_saida = argv[2];
+    int algoritmo;
+    std::istringstream(argv[3]) >> algoritmo;
     Grafo *grafo_inicial = new Grafo(caminho_entrada, false, false, true, 2);
-
+    vector<int> solucao;
     grafo_inicial->salva_grafo(caminho_saida);
-
-    // vector<int> solucao = subconjunto_dominante_ponderado(GULOSO, grafo_inicial);
-    // vector<int> solucao = subconjunto_dominante_ponderado(GULOSO_RANDOMIZADO, grafo_inicial, 0.1, 500);
-    vector<int> solucao = subconjunto_dominante_ponderado(GULOSO_RANDOMIZADO_REATIVO, grafo_inicial, 0, 2500, 250, {0.05, 0.10, 0.15, 0.30, 0.50});
+    switch (algoritmo)
+    {
+    case 1:
+        solucao = subconjunto_dominante_ponderado(GULOSO, grafo_inicial, 0, 1, 1,{0.15, 0.30, 0.50});
+        break;
+    case 2:
+        solucao = subconjunto_dominante_ponderado(GULOSO_RANDOMIZADO, grafo_inicial, 0.1, 500);
+        break;
+    case 3:
+        solucao = subconjunto_dominante_ponderado(GULOSO_RANDOMIZADO_REATIVO, grafo_inicial, 0, 2500, 250, {0.05, 0.10, 0.15, 0.30, 0.50});
+        break;    
+    default:
+        break;
+    }
+    
 
     cout << "\nO conjunto de vertices dominantes eh: \n";
     for (auto vertice : solucao)
@@ -30,3 +42,4 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+
