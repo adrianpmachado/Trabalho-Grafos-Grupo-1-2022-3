@@ -34,13 +34,13 @@ void reincia_vertices(map<int, Vertice *> const &vertices)
   }
 }
 
-void atualiza_probabilidades(vector<float> &probabilidades, vector<float> const &media_solucoes, float peso_melhor_solucao)
+void atualiza_probabilidades(vector<double> &probabilidades, vector<pair<int, double>> const &media_solucoes, double peso_melhor_solucao)
 {
-  vector<float> aux;
-  float total_aux = 0;
+  vector<double> aux;
+  double total_aux = 0;
   for (int i = 0; i < probabilidades.size(); i++)
   {
-    float calc = peso_melhor_solucao / media_solucoes.at(i);
+    double calc = peso_melhor_solucao / media_solucoes.at(i).second;
     aux.push_back(calc);
     total_aux += calc;
   }
@@ -50,21 +50,25 @@ void atualiza_probabilidades(vector<float> &probabilidades, vector<float> const 
   }
 }
 
-void atualiza_medias(vector<float> &media_solucoes, int indice_alfa, float peso_solucao)
+void atualiza_medias(vector<pair<int, double>> &media_solucoes, int indice_alfa, double peso_solucao)
 {
-  float media_antiga = media_solucoes.at(indice_alfa);
-  float nova_media;
-  if (media_antiga == 0)
+  int num_solucoes = media_solucoes.at(indice_alfa).first;
+  double media_antiga = media_solucoes.at(indice_alfa).second;
+
+  double nova_media;
+  if (num_solucoes == 0)
     nova_media = peso_solucao;
   else
-    nova_media = (media_antiga + peso_solucao) / 2;
-  media_solucoes.at(indice_alfa) = nova_media;
+    nova_media = (media_antiga * num_solucoes + peso_solucao) / (num_solucoes + 1);
+
+  media_solucoes.at(indice_alfa).second = nova_media;
+  media_solucoes.at(indice_alfa).first++;
 }
 
-int escolhe_alfa(vector<float> const &probabilidades)
+int escolhe_alfa(vector<double> const &probabilidades)
 {
-  float prob = xrandom(10001) / 10000.0;
-  float soma = 0;
+  double prob = xrandom(10001) / 10000.0;
+  double soma = 0;
   for (int i = 0; i < probabilidades.size(); i++)
   {
     soma += probabilidades.at(i);
@@ -74,9 +78,9 @@ int escolhe_alfa(vector<float> const &probabilidades)
   return probabilidades.size() - 1;
 }
 
-float calcula_peso(Grafo *grafo, vector<int> const &solucao)
+double calcula_peso(Grafo *grafo, vector<int> const &solucao)
 {
-  float peso = 0;
+  double peso = 0.0;
   for (auto vertice_id : solucao)
   {
     peso += grafo->busca_vertice(vertice_id)->obter_peso();
@@ -84,7 +88,7 @@ float calcula_peso(Grafo *grafo, vector<int> const &solucao)
   return peso;
 }
 
-float calcula_qualidade(Vertice *vertice)
+double calcula_qualidade(Vertice *vertice)
 {
   if (vertice->obter_foi_visitado())
     return 0;
@@ -168,7 +172,7 @@ bool ordena_candidatos(Vertice *vertice1, Vertice *vertice2)
 Vertice *guloso(vector<Vertice *> &candidatos)
 {
   Vertice *melhor_candidato = candidatos.at(0);
-  float melhor_qualidade = melhor_candidato->obter_qualidade();
+  double melhor_qualidade = melhor_candidato->obter_qualidade();
 
   // obter melhor candidato
   for (int i = 1; i < candidatos.size(); i++)
@@ -207,8 +211,8 @@ vector<int> subconjunto_dominante_ponderado(Algoritmo algoritmo, Grafo *grafo, f
 {
   clock_t tInicio, tFim, tDecorrido;
   tInicio = clock();
-  vector<float> alfas_probabilidades;
-  vector<float> alfas_solucoes;
+  vector<double> alfas_probabilidades;
+  vector<pair<int, double>> alfas_solucoes;
 
   num_iteracoes = num_iteracoes <= 0 ? 1 : num_iteracoes;
   switch (algoritmo)
@@ -222,7 +226,7 @@ vector<int> subconjunto_dominante_ponderado(Algoritmo algoritmo, Grafo *grafo, f
       lista_alfas.push_back(0);
     for (int i = 0; i < lista_alfas.size(); i++)
     {
-      alfas_solucoes.push_back(0);
+      alfas_solucoes.push_back(make_pair(0, 0.0));
       alfas_probabilidades.push_back(1.0 / lista_alfas.size());
       lista_alfas.at(i) = normalizar_alfa(lista_alfas.at(i));
     }
@@ -232,7 +236,7 @@ vector<int> subconjunto_dominante_ponderado(Algoritmo algoritmo, Grafo *grafo, f
     cout << "Iniciando algoritmo guloso..." << endl;
   }
 
-  float peso_melhor_solucao = 0;
+  double peso_melhor_solucao = 0;
   vector<int> melhor_solucao;
   for (int iteracao = 0; iteracao < num_iteracoes; iteracao++)
   {
@@ -290,7 +294,7 @@ vector<int> subconjunto_dominante_ponderado(Algoritmo algoritmo, Grafo *grafo, f
       break;
     }
 
-    float peso_solucao = calcula_peso(grafo, solucao);
+    double peso_solucao = calcula_peso(grafo, solucao);
     if (iteracao == 0 || peso_solucao < peso_melhor_solucao)
     {
       peso_melhor_solucao = peso_solucao;

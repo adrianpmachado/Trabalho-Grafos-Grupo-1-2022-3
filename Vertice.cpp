@@ -96,15 +96,15 @@ void Vertice::remove_antecessor(int id)
     }
 }
 
-void Vertice::set_qualidade(float qualidade)
+void Vertice::set_qualidade(double qualidade)
 {
     this->qualidade = qualidade;
 }
 
-float Vertice::obter_qualidade()
+double Vertice::obter_qualidade()
 {
     return this->qualidade;
-}   
+}
 
 void Vertice::set_foi_coberto(bool foi_coberto)
 {
