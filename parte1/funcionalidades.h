@@ -81,6 +81,18 @@ void grafo_uniao(Grafo *grafo, string caminho_saida)
 
 void grafo_diferenca()
 {
+	Grafo *novo_grafo = obter_novo_grafo(grafo->obter_direcionado(), grafo->obter_peso_aresta(), grafo->obter_peso_vertice());
+	Grafo *grafo_diferenca = new Grafo();
+	cout << "Grafo diferença.."
+	for(auto aresta_aux: novo_grafo->arestas_grafo)
+	{
+		if(grafo->existe_Aresta(aresta_aux)){
+			//não salva no grafo diferença
+		}
+		else {
+			grafo_diferenca->insere_aresta(aresta_aux)
+		}
+	}
 	return;
 }
 
