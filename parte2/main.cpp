@@ -9,6 +9,7 @@
 using namespace std;
 int main(int argc, char *argv[])
 {
+    xrandomize(time(NULL));
     string caminho_entrada = argv[1];
     string caminho_saida = argv[2];
     int algoritmo;
