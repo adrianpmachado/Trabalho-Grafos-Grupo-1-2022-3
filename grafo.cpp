@@ -12,9 +12,12 @@ Grafo::Grafo(string path_arquivo_entrada, bool direcionado, bool peso_aresta, bo
     this->peso_vertice = peso_vertice;
     this->peso_aresta = peso_aresta;
 
-    if(parte_trabalho == 1) {
+    if (parte_trabalho == 1)
+    {
         this->carrega_grafo_1();
-    } else if(parte_trabalho == 2) {
+    }
+    else if (parte_trabalho == 2)
+    {
         this->carrega_grafo_2();
     }
 };
@@ -26,7 +29,7 @@ Grafo::Grafo(bool direcionado, bool peso_aresta, bool peso_vertice)
     this->peso_aresta = peso_aresta;
 };
 
-Vertice* Grafo::insere_vertice(int id)
+Vertice *Grafo::insere_vertice(int id)
 {
     Vertice *vertice_aux;
     // verificar se o vertice já foi inserido
@@ -211,12 +214,26 @@ void Grafo::salva_grafo(string path_arquivo_saida)
         conector = "--";
     }
 
-    if(peso_vertice)
+    for (auto vertice_aux : hash_vertices_grafo)
     {
-        for (auto vertice_aux : hash_vertices_grafo)
+        arquivo_graphviz << vertice_aux.second->obter_id();
+        if (peso_vertice)
         {
-            arquivo_graphviz << vertice_aux.second->obter_id() << " [weight=" << vertice_aux.second->obter_peso() << "];" << endl;
+            arquivo_graphviz << " [weight=" << vertice_aux.second->obter_peso() << "]";
         }
+        if (vertice_aux.second->obter_foi_visitado())
+        {
+            arquivo_graphviz << " [color=red]";
+        }
+        else if (vertice_aux.second->obter_foi_coberto())
+        {
+            arquivo_graphviz << " [color=purple]";
+        }
+        else
+        {
+            arquivo_graphviz << " [color=black]";
+        }
+        arquivo_graphviz << ";" << endl;
     }
 
     for (auto aresta_aux : arestas_grafo)
@@ -229,6 +246,7 @@ void Grafo::salva_grafo(string path_arquivo_saida)
         arquivo_graphviz << ";" << endl;
     }
     arquivo_graphviz << "}";
+    arquivo_graphviz.close();
 }
 bool Grafo::obter_direcionado()
 {
@@ -278,16 +296,18 @@ void Grafo::carrega_grafo_2()
     }
 
     arquivo_grafos >> me_ignore;
-    arquivo_grafos >> ordem_grafo;    
+    arquivo_grafos >> ordem_grafo;
 
     // pular linhas de posições
     arquivo_grafos.seekg(ios::beg);
-    for(int i=0; i < ordem_grafo + 4; ++i){
-        arquivo_grafos.ignore(numeric_limits<streamsize>::max(),'\n');
+    for (int i = 0; i < ordem_grafo + 4; ++i)
+    {
+        arquivo_grafos.ignore(numeric_limits<streamsize>::max(), '\n');
     }
 
     Vertice *vertice_aux;
-    for(int id_vertice = 1; id_vertice <= ordem_grafo; id_vertice++){
+    for (int id_vertice = 1; id_vertice <= ordem_grafo; id_vertice++)
+    {
         float peso_vertice = 0;
         arquivo_grafos >> peso_vertice;
         vertice_aux = this->insere_vertice(id_vertice);
@@ -296,17 +316,19 @@ void Grafo::carrega_grafo_2()
 
     arquivo_grafos >> me_ignore;
 
-    for(int id_saida = 1; id_saida <= ordem_grafo; id_saida++){
-        for(int id_destino = 1; id_destino <= ordem_grafo; id_destino++){
+    for (int id_saida = 1; id_saida <= ordem_grafo; id_saida++)
+    {
+        for (int id_destino = 1; id_destino <= ordem_grafo; id_destino++)
+        {
             bool aresta_existe = false;
             arquivo_grafos >> aresta_existe;
-            if(aresta_existe && id_destino > id_saida){
+            if (aresta_existe && id_destino > id_saida)
+            {
                 this->insere_aresta(id_saida, id_destino, 0);
             }
         }
     }
 
-    cout << "Grafo carregado com sucesso!" << endl;
     arquivo_grafos.close();
     return;
 }

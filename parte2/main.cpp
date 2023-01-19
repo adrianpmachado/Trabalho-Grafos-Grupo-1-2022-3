@@ -14,32 +14,28 @@ int main(int argc, char *argv[])
     int algoritmo;
     std::istringstream(argv[3]) >> algoritmo;
     Grafo *grafo_inicial = new Grafo(caminho_entrada, false, false, true, 2);
+
     vector<int> solucao;
-    grafo_inicial->salva_grafo(caminho_saida);
     switch (algoritmo)
     {
     case 1:
-        solucao = subconjunto_dominante_ponderado(GULOSO, grafo_inicial, 0, 1, 1,{0.15, 0.30, 0.50});
+        solucao = subconjunto_dominante_ponderado(GULOSO, grafo_inicial);
         break;
     case 2:
-        solucao = subconjunto_dominante_ponderado(GULOSO_RANDOMIZADO, grafo_inicial, 0.1, 500);
+        solucao = subconjunto_dominante_ponderado(GULOSO_RANDOMIZADO, grafo_inicial, 0.15, 500);
         break;
     case 3:
+        solucao = subconjunto_dominante_ponderado(GULOSO_RANDOMIZADO, grafo_inicial, 0.30, 500);
+        break;
+    case 4:
+        solucao = subconjunto_dominante_ponderado(GULOSO_RANDOMIZADO, grafo_inicial, 0.50, 500);
+        break;
+    case 5:
         solucao = subconjunto_dominante_ponderado(GULOSO_RANDOMIZADO_REATIVO, grafo_inicial, 0, 2500, 250, {0.05, 0.10, 0.15, 0.30, 0.50});
-        break;    
+        break;
     default:
         break;
     }
-    
-
-    cout << "\nO conjunto de vertices dominantes eh: \n";
-    for (auto vertice : solucao)
-    {
-        cout << vertice << endl;
-    }
-
-    cout << "\nO peso do conjunto eh: " << calcula_peso(grafo_inicial, solucao) << endl;
 
     return 0;
 }
-

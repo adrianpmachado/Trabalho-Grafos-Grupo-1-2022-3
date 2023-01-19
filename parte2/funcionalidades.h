@@ -108,59 +108,39 @@ double calcula_qualidade(Vertice *vertice)
 
 int adiciona_solucao(vector<int> &solucao, Vertice *vertice)
 {
-  int vertices_cobertos = 0;
   solucao.push_back(vertice->obter_id());
   vertice->set_foi_visitado(true);
-
-  if (!vertice->obter_foi_coberto())
-    vertices_cobertos++;
-
   vertice->set_foi_coberto(true);
 
   for (auto vizinho : vertice->vertices_adjacentes)
   {
-    if (!vizinho.second->obter_foi_coberto())
-      vertices_cobertos++;
     vizinho.second->set_foi_coberto(true);
   }
-  return vertices_cobertos;
 }
 
-vector<int> obter_solucao_inicial(map<int, Vertice *> candidatos, int &total_vertices_cobertos)
+vector<int> obter_solucao_inicial(map<int, Vertice *> candidatos)
 {
-  total_vertices_cobertos = 0;
   vector<int> solucao;
   for (auto vertice : candidatos)
   {
-    bool esta_na_solucao = false;
-    esta_na_solucao |= vertice.second->obter_grau_entrada() == 0;
-    esta_na_solucao |= vertice.second->obter_peso() <= 0;
-    if (esta_na_solucao)
+    if (vertice.second->obter_grau_entrada() == 0 || vertice.second->obter_peso() <= 0)
     {
-      total_vertices_cobertos += adiciona_solucao(solucao, vertice.second);
-    }
-    else
-    {
-      vertice.second->set_qualidade(calcula_qualidade(vertice.second));
+      adiciona_solucao(solucao, vertice.second);
     }
   }
   return solucao;
 }
 
+void remove_candidato(vector<Vertice *> &candidatos, Vertice *vertice)
+{
+  candidatos.erase(remove(candidatos.begin(), candidatos.end(), vertice), candidatos.end());
+}
+
 void atualiza_candidatos(vector<Vertice *> &candidatos)
 {
-  auto it = candidatos.begin();
-  while (it != candidatos.end())
+  for (auto vertice : candidatos)
   {
-    Vertice *vertice_aux = *it;
-    if (vertice_aux->obter_foi_visitado())
-    {
-      it = candidatos.erase(it);
-      continue;
-    }
-
-    vertice_aux->set_qualidade(calcula_qualidade(vertice_aux));
-    it++;
+    vertice->set_qualidade(calcula_qualidade(vertice));
   }
 }
 
@@ -169,29 +149,23 @@ bool ordena_candidatos(Vertice *vertice1, Vertice *vertice2)
   return vertice1->obter_qualidade() > vertice2->obter_qualidade();
 }
 
-Vertice *guloso(vector<Vertice *> &candidatos)
-{
-  Vertice *melhor_candidato = candidatos.at(0);
-  double melhor_qualidade = melhor_candidato->obter_qualidade();
-
-  // obter melhor candidato
-  for (int i = 1; i < candidatos.size(); i++)
-  {
-    if (candidatos.at(i)->obter_qualidade() > melhor_qualidade)
-    {
-      melhor_qualidade = candidatos.at(i)->obter_qualidade();
-      melhor_candidato = candidatos.at(i);
-    }
-  }
-
-  return melhor_candidato;
-}
-
-Vertice *guloso_randomizado(vector<Vertice *> &candidatos, const float alfa)
+Vertice *escolhe_vertice(vector<Vertice *> &candidatos, const float alfa)
 {
   sort(candidatos.begin(), candidatos.end(), ordena_candidatos);
   int indice_candidato = xrandom(alfa * candidatos.size());
   return candidatos.at(indice_candidato);
+}
+
+bool solucao_encontrada(vector<Vertice *> &candidatos)
+{
+  for (auto vertice : candidatos)
+  {
+    if (!vertice->obter_foi_coberto())
+    {
+      return false;
+    }
+  }
+  return true;
 }
 
 /**
@@ -223,26 +197,32 @@ vector<int> subconjunto_dominante_ponderado(Algoritmo algoritmo, Grafo *grafo, f
     break;
   case GULOSO_RANDOMIZADO_REATIVO:
     if (lista_alfas.size() == 0)
+    {
       lista_alfas.push_back(0);
+    }
+
     for (int i = 0; i < lista_alfas.size(); i++)
     {
       alfas_solucoes.push_back(make_pair(0, 0.0));
       alfas_probabilidades.push_back(1.0 / lista_alfas.size());
       lista_alfas.at(i) = normalizar_alfa(lista_alfas.at(i));
     }
+
     cout << "Iniciando algoritmo guloso randomizado reativo..." << endl;
     break;
   default:
+    alfa = 0;
     cout << "Iniciando algoritmo guloso..." << endl;
   }
 
   double peso_melhor_solucao = 0;
+  float alfa_melhor_solucao = 0;
   vector<int> melhor_solucao;
   for (int iteracao = 0; iteracao < num_iteracoes; iteracao++)
   {
     reincia_vertices(grafo->hash_vertices_grafo);
-    int vertices_cobertos = 0;
-    vector<int> solucao = obter_solucao_inicial(grafo->hash_vertices_grafo, vertices_cobertos);
+
+    vector<int> solucao = obter_solucao_inicial(grafo->hash_vertices_grafo);
 
     vector<Vertice *> lista_candidatos;
     for (auto vertice : grafo->hash_vertices_grafo)
@@ -260,7 +240,6 @@ vector<int> subconjunto_dominante_ponderado(Algoritmo algoritmo, Grafo *grafo, f
       {
         if (iteracao % bloco == 0)
         {
-          cout << "Iteracao " << iteracao << " - Atualizando probabilidades..." << endl;
           atualiza_probabilidades(alfas_probabilidades, alfas_solucoes, peso_melhor_solucao);
         }
         indice_alfa = escolhe_alfa(alfas_probabilidades);
@@ -268,38 +247,27 @@ vector<int> subconjunto_dominante_ponderado(Algoritmo algoritmo, Grafo *grafo, f
       alfa = lista_alfas.at(indice_alfa);
     }
 
-    while (vertices_cobertos < grafo->obter_ordem())
+    while (!solucao_encontrada(lista_candidatos))
     {
-      Vertice *vertice_aux;
-
-      switch (algoritmo)
-      {
-      case GULOSO_RANDOMIZADO:
-        vertice_aux = guloso_randomizado(lista_candidatos, alfa);
-        break;
-      case GULOSO_RANDOMIZADO_REATIVO:
-        vertice_aux = guloso_randomizado(lista_candidatos, alfa);
-        break;
-      default:
-        vertice_aux = guloso(lista_candidatos);
-      }
-
-      vertices_cobertos += adiciona_solucao(solucao, vertice_aux);
+      Vertice *vertice_aux = escolhe_vertice(lista_candidatos, alfa);
+      adiciona_solucao(solucao, vertice_aux);
+      remove_candidato(lista_candidatos, vertice_aux);
       atualiza_candidatos(lista_candidatos);
     }
 
+    double peso_solucao = calcula_peso(grafo, solucao);
     if (algoritmo == GULOSO)
     {
       melhor_solucao = solucao;
+      peso_melhor_solucao = peso_solucao;
       break;
     }
 
-    double peso_solucao = calcula_peso(grafo, solucao);
     if (iteracao == 0 || peso_solucao < peso_melhor_solucao)
     {
       peso_melhor_solucao = peso_solucao;
       melhor_solucao = solucao;
-      cout << "Melhor solucao encontrada: " << peso_melhor_solucao << endl;
+      alfa_melhor_solucao = alfa;
     }
 
     if (algoritmo == GULOSO_RANDOMIZADO_REATIVO)
@@ -311,9 +279,15 @@ vector<int> subconjunto_dominante_ponderado(Algoritmo algoritmo, Grafo *grafo, f
   tFim = clock();
   tDecorrido = ((tFim - tInicio) * 1000) / CLOCKS_PER_SEC;
 
-  cout << "Algoritmo finalizado!\n"
-       << endl;
-  cout << "Tempo decorrido: " << tDecorrido << " ms" << endl;
+  cout << "Tempo decorrido: " << (double)tDecorrido << " ms" << endl;
+  cout << "Alfa: " << alfa_melhor_solucao << endl;
+  cout << "Peso solucao: " << peso_melhor_solucao << endl;
+  cout << "Solucao: ";
+  for (int i = 0; i < melhor_solucao.size(); i++)
+  {
+    cout << melhor_solucao.at(i) << " ";
+  }
+  cout << endl;
 
   return melhor_solucao;
 }
