@@ -1,5 +1,5 @@
-#include "Vertice.h"
-#include "Grafo.h"
+#include "../Vertice.h"
+#include "../Grafo.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
