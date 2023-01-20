@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
-#include "../Grafo.h"
+#include "Grafo.h"
 #include "math.h"
 #include "rede-pert.h"
 
@@ -38,18 +38,35 @@ void grafo_intersecao(Grafo *grafo, string caminho_saida)
 {
 	Grafo *novo_grafo = obter_novo_grafo(grafo->obter_direcionado(), grafo->obter_peso_vertice(), grafo->obter_peso_aresta());
 
-	cout << "Intersecão finalizada." << endl;
-	cout << "\nGrafo resultado:\n";
-	
-	Grafo *intersecao;
-	for (auto aresta_aux : novo_grafo->arestas_grafo)
+	cout << "Iniciando intersecao..." << endl;
+
+	Grafo *intersecao = new Grafo(grafo->obter_direcionado(), grafo->obter_peso_vertice(), grafo->obter_peso_aresta());
+	for (auto vertice : grafo->hash_vertices_grafo)
 	{
-		if(grafo->existe_Aresta(aresta_aux->obter_id_destino(),aresta_aux->obter_id_saida())){
-			intersecao->insere_aresta(aresta_aux->obter_id_saida(), aresta_aux->obter_id_destino(), aresta_aux->obter_peso());
+		if (novo_grafo->busca_vertice(vertice.second->obter_id()) != NULL)
+		{
+			Vertice *vertice_inserido = intersecao->insere_vertice(vertice.second->obter_id());
+			if (grafo->obter_peso_vertice())
+			{
+				vertice_inserido->set_peso(vertice.second->obter_peso());
+			}
 		}
 	}
-	
-	grafo->imprimir_grafo_lista_de_adjacencia();
+	for (auto aresta : grafo->arestas_grafo)
+	{
+		if (novo_grafo->existe_aresta(aresta->obter_id_saida(), aresta->obter_id_destino()))
+		{
+			Aresta *aresta_inserida = intersecao->insere_aresta(aresta->obter_id_saida(), aresta->obter_id_destino(), aresta->obter_peso());
+			if (grafo->obter_peso_aresta())
+			{
+				aresta_inserida->set_peso(aresta->obter_peso());
+			}
+		}
+	}
+
+	cout << "Intersecao finalizada." << endl;
+	cout << "Grafo resultado:" << endl;
+	novo_grafo->imprimir_grafo_lista_de_adjacencia();
 	cout << endl;
 	grafo->salva_grafo(caminho_saida);
 
@@ -79,8 +96,31 @@ void grafo_uniao(Grafo *grafo, string caminho_saida)
 	return;
 }
 
-void grafo_diferenca()
+void grafo_diferenca(Grafo *grafo, string caminho_saida)
 {
+	Grafo *novo_grafo = obter_novo_grafo(grafo->obter_direcionado(), grafo->obter_peso_aresta(), grafo->obter_peso_vertice());
+
+	for (auto vertice_aux : novo_grafo->hash_vertices_grafo)
+	{
+		if (grafo->busca_vertice(vertice_aux.second->obter_id()) == NULL)
+		{
+			cout << "Os grafos precisam ter os mesmos vértices!" << endl;
+			exit(1);
+		}
+	}
+
+	cout << "Obtendo grafo diferenca..." << endl;
+
+	for (auto aresta_aux : novo_grafo->arestas_grafo)
+	{
+		grafo->remove_aresta(aresta_aux->obter_id_saida(), aresta_aux->obter_id_destino());
+	}
+
+	cout << "Diferenca finalizada." << endl;
+	cout << "\nGrafo resultado:\n";
+	grafo->imprimir_grafo_lista_de_adjacencia();
+	cout << endl;
+	grafo->salva_grafo(caminho_saida);
 	return;
 }
 
@@ -95,7 +135,7 @@ void realiza_operacao(int option, Grafo *grafo, string caminho_saida)
 		grafo_uniao(grafo, caminho_saida);
 		break;
 	case 3:
-		grafo_diferenca();
+		grafo_diferenca(grafo, caminho_saida);
 		break;
 	case 4:
 		if (grafo->obter_direcionado())

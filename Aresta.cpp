@@ -11,6 +11,10 @@ Aresta::Aresta(int id_saida, int id_destino, bool eh_direcionado, float peso)
     this->peso = peso;
 }
 
+Aresta::~Aresta()
+{
+}
+
 float Aresta::obter_peso()
 {
     return this->peso;

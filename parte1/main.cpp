@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <list>
-#include "../Grafo.h"
+#include "Grafo.h"
 #include <sstream>
 #include "funcionalidades.h"
 

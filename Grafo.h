@@ -33,12 +33,13 @@ public:
     int obter_ordem(); // funcionando
     Vertice *obter_primeiro_vertice();
     Vertice *obter_ultimo_vertice();
-    Vertice* insere_vertice(int id); // funcionando
+    Vertice *insere_vertice(int id); // funcionando
     bool remove_vertice(int id);
+    bool remove_aresta(int id_saida, int id_destino);
     Vertice *busca_vertice(int id); // funcionando
     int obter_indice_vertice(int id);
-    void insere_aresta(int id_saida, int id_destino, float peso);
-    bool existe_Aresta(int id_saida, int id_destino);
+    Aresta *insere_aresta(int id_saida, int id_destino, float peso);
+    bool existe_aresta(int id_saida, int id_destino);
     Aresta *obter_aresta(int id_saida, int id_destino);
     void imprimir_grafo_lista_de_adjacencia();
     void carrega_grafo_1();

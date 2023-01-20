@@ -48,11 +48,17 @@ bool Grafo::remove_vertice(int id)
 {
     for (auto it = this->hash_vertices_grafo.begin(); it != this->hash_vertices_grafo.end(); it++)
     {
-        // renover a adjacencia de todos os vertices que apontam para esse
         it->second->remove_adjacencia(id);
-        // remover a adjacencia de todos os vertices que esse aponta
         it->second->remove_antecessor(id);
     }
+    for (int i = this->arestas_grafo.size() - 1; i >= 0; i--)
+    {
+        if (arestas_grafo.at(i)->obter_id_destino() || arestas_grafo.at(i)->obter_id_saida())
+        {
+            this->arestas_grafo.erase(arestas_grafo.begin() + i);
+        }
+    }
+
     // remover o vertice do hash
     if (busca_vertice(id) != NULL)
     {
@@ -75,7 +81,7 @@ Vertice *Grafo::busca_vertice(int id)
         return NULL;
     }
 };
-void Grafo::insere_aresta(int id_saida, int id_destino, float peso)
+Aresta *Grafo::insere_aresta(int id_saida, int id_destino, float peso)
 {
     this->insere_vertice(id_saida);
     this->insere_vertice(id_destino);
@@ -95,9 +101,10 @@ void Grafo::insere_aresta(int id_saida, int id_destino, float peso)
             vertice_aux_02->adiciona_adjacencia(vertice_aux_01);
         }
         this->arestas_grafo.push_back(nova_aresta);
+        return nova_aresta;
     }
 }
-bool Grafo::existe_Aresta(int id_saida, int id_destino)
+bool Grafo::existe_aresta(int id_saida, int id_destino)
 {
     // verificar se a aresta está no vector de arestas
     for (Aresta *aresta_aux : arestas_grafo)
@@ -331,4 +338,33 @@ void Grafo::carrega_grafo_2()
 
     arquivo_grafos.close();
     return;
+}
+
+bool Grafo::remove_aresta(int id_saida, int id_destino)
+{
+    for (int i = arestas_grafo.size() - 1; i >= 0; i--)
+    {
+        Aresta *aresta_aux = arestas_grafo.at(i);
+        if (aresta_aux->obter_id_saida() == id_saida && aresta_aux->obter_id_destino() == id_destino)
+        {
+            arestas_grafo.erase(arestas_grafo.begin() + i);
+            delete aresta_aux;
+        }
+        else if (!direcionado && aresta_aux->obter_id_saida() == id_destino && aresta_aux->obter_id_destino() == id_saida)
+        {
+            arestas_grafo.erase(arestas_grafo.begin() + i);
+            delete aresta_aux;
+        }
+    }
+
+    busca_vertice(id_saida)->remove_adjacencia(id_destino);
+    busca_vertice(id_destino)->remove_antecessor(id_saida);
+
+    if (!direcionado)
+    {
+        busca_vertice(id_destino)->remove_adjacencia(id_saida);
+        busca_vertice(id_saida)->remove_antecessor(id_destino);
+    }
+
+    return true;
 }
