@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
-#include "Grafo.h"
+#include "../Grafo.h"
 #include "math.h"
 #include "rede-pert.h"
 
