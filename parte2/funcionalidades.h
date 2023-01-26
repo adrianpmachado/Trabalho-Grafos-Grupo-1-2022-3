@@ -279,7 +279,7 @@ vector<int> subconjunto_dominante_ponderado(Algoritmo algoritmo, Grafo *grafo, f
   tFim = clock();
   tDecorrido = ((tFim - tInicio) * 1000) / CLOCKS_PER_SEC;
 
-  cout << "Tempo decorrido: " << (double)tDecorrido << " ms" << endl;
+  cout << "\nTempo decorrido: " << (double)tDecorrido << " ms" << endl;
   cout << "Alfa: " << alfa_melhor_solucao << endl;
   cout << "Peso solucao: " << peso_melhor_solucao << endl;
   cout << "Solucao: ";
